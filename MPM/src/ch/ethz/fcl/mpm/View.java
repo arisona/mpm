@@ -34,6 +34,7 @@ import javax.media.opengl.glu.GLU;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.scene.AbstractView;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
@@ -46,7 +47,8 @@ public class View extends AbstractView {
 	}
 
 	public static final double NEAR = 0.1;
-	public static final double FAR = 1000.0;
+	//public static final double FAR = 1000.0;
+	public static final double FAR = Double.POSITIVE_INFINITY;
 
 	private final int viewIndex;
 	private final ViewType viewType;
@@ -122,7 +124,7 @@ public class View extends AbstractView {
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		if (!isCalibrated()) {
 			gl.glLoadIdentity();
-			glu.gluPerspective(45.0, (double) getWidth() / getHeight(), NEAR, FAR);
+			gl.glLoadMatrixd(ProjectionUtilities.getPerspectiveMatrix(45.0, (double) getWidth() / getHeight(), NEAR, FAR), 0);
 		} else {
 			gl.glLoadMatrixd(getProjectionMatrix(), 0);
 		}

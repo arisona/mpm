@@ -158,7 +158,6 @@ public final class BimberRaskarCalibrator extends AbstractCalibrator {
 		// (skipped since not needed for our purpose here)
 		
 		// create 4x4 projection and modelview matrices
-		
 		projectionMatrix = MatrixUtils.createRealMatrix(4, 4);
 		projectionMatrix.setEntry(0, 0, -a);
 		projectionMatrix.setEntry(0, 1, 0.0);
@@ -170,8 +169,13 @@ public final class BimberRaskarCalibrator extends AbstractCalibrator {
 		projectionMatrix.setEntry(1, 3, 0);
 		projectionMatrix.setEntry(2, 0, 0);
 		projectionMatrix.setEntry(2, 1, 0);
-		projectionMatrix.setEntry(2, 2, -(far + near) / (far - near));
-		projectionMatrix.setEntry(2, 3, -2.0 * far * near / (far -near));
+		if (far >= Double.POSITIVE_INFINITY) {
+			projectionMatrix.setEntry(2, 2, -1.0);
+			projectionMatrix.setEntry(2, 3, -2.0 * near);			
+		} else {
+			projectionMatrix.setEntry(2, 2, -(far + near) / (far - near));
+			projectionMatrix.setEntry(2, 3, -2.0 * far * near / (far - near));
+		}
 		projectionMatrix.setEntry(3, 0, 0);
 		projectionMatrix.setEntry(3, 1, 0);
 		projectionMatrix.setEntry(3, 2, -1);
