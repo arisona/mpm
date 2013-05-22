@@ -35,7 +35,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 
-import ch.ethz.fcl.mpm.util.MathUtils;
+import ch.ethz.fcl.util.MathUtils;
 
 public final class BimberRaskarCalibrator extends AbstractCalibrator {
 	

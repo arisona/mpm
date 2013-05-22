@@ -24,7 +24,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mpm.osc;
+package ch.ethz.fcl.net.osc;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.SwingUtilities;
 
-import ch.ethz.fcl.mpm.net.AddressUtilities;
+import ch.ethz.fcl.net.util.AddressUtilities;
 
 public final class OSCServer extends OSCDispatcher implements OSCSender {
 	private static final int RECEIVE_BUFFER_SIZE = 1024 * 1024;

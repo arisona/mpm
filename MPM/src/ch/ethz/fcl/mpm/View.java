@@ -34,11 +34,11 @@ import javax.media.opengl.glu.GLU;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+import ch.ethz.fcl.mogl.gl.VBO;
+import ch.ethz.fcl.mogl.scene.AbstractView;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
 import ch.ethz.fcl.mpm.calibration.CalibrationContext;
-import ch.ethz.fcl.mpm.gl.VBO;
 import ch.ethz.fcl.mpm.model.IGeometryModel;
-import ch.ethz.fcl.mpm.scene.AbstractView;
 
 public class View extends AbstractView {
 	public enum ViewType {

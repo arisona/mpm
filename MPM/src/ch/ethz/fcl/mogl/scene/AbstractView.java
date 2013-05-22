@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mpm.scene;
+package ch.ethz.fcl.mogl.scene;
 
 import java.awt.Font;
 import java.awt.Point;
@@ -38,7 +38,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import ch.ethz.fcl.mpm.gl.Frame;
+import ch.ethz.fcl.mogl.gl.Frame;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 

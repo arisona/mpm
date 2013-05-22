@@ -25,18 +25,51 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mpm.util;
+package ch.ethz.fcl.mogl.scene;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
 
-public final class MathUtils {
-	public static Vector3D toVector3D(RealVector v) {
-		return new Vector3D(v.getEntry(0), v.getEntry(1), v.getEntry(2));
-	}
+/**
+ * A 'scene' is the controller that coordinates both model and associated views.
+ * 
+ * @author radar
+ */
+interface IScene<T extends IView> {
 	
-	public static RealVector toRealVector(Vector3D v) {
-		return new ArrayRealVector(v.toArray(), false);
-	}
+	void addView(T view);
+	
+	ArrayList<T> getViews();
+	
+	void repaintAll();
+
+	// key listener
+
+	void keyPressed(KeyEvent e, T view);
+
+	void keyReleased(KeyEvent e, T view);
+
+	void keyTyped(KeyEvent e, T view);
+
+	// mouse listener
+
+	void mouseEntered(MouseEvent e, T view);
+
+	void mouseExited(MouseEvent e, T view);
+
+	void mousePressed(MouseEvent e, T view);
+
+	void mouseReleased(MouseEvent e, T view);
+
+	void mouseClicked(MouseEvent e, T view);
+
+	// mouse motion listener
+
+	void mouseMoved(MouseEvent e, T view);
+
+	void mouseDragged(MouseEvent e, T view);
+
+	void mouseWheelMoved(MouseWheelEvent e, T view);
 }

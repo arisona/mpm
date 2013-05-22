@@ -41,10 +41,10 @@ import javax.swing.Timer;
 
 import ch.ethz.fcl.mpm.model.IGeometryModel;
 import ch.ethz.fcl.mpm.model.SGModel;
-import ch.ethz.fcl.mpm.net.UDPServer;
-import ch.ethz.fcl.mpm.osc.OSCError;
-import ch.ethz.fcl.mpm.osc.OSCHandler;
-import ch.ethz.fcl.mpm.osc.OSCServer;
+import ch.ethz.fcl.net.osc.OSCError;
+import ch.ethz.fcl.net.osc.OSCHandler;
+import ch.ethz.fcl.net.osc.OSCServer;
+import ch.ethz.fcl.net.util.UDPServer;
 
 public final class MPM {
 	private Scene scene;

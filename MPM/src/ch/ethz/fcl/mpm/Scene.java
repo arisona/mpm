@@ -34,13 +34,13 @@ import java.util.prefs.Preferences;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+import ch.ethz.fcl.mogl.scene.AbstractScene;
+import ch.ethz.fcl.mogl.scene.ShadowVolumeRenderer;
 import ch.ethz.fcl.mpm.View.ViewType;
 import ch.ethz.fcl.mpm.calibration.BimberRaskarCalibrator;
 import ch.ethz.fcl.mpm.calibration.CalibrationContext;
 import ch.ethz.fcl.mpm.calibration.ICalibrator;
 import ch.ethz.fcl.mpm.model.IGeometryModel;
-import ch.ethz.fcl.mpm.scene.AbstractScene;
-import ch.ethz.fcl.mpm.scene.ShadowVolumeRenderer;
 
 public class Scene extends AbstractScene<View> {
 	public static final String[] HELP = {

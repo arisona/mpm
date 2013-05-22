@@ -24,16 +24,26 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mpm.osc;
+package ch.ethz.fcl.net.osc;
 
-public interface OSCHandler {
-	/**
-	 * @param address
-	 *            OSC address parts (without the "/")
-	 * @param addrIdx
-	 *            index of handled address
-	 * @param typeString
-	 *            OSC method signature
-	 */
-	public Object[] handle(String[] address, int addrIdx, StringBuilder typeString, long timestamp, Object... args) throws OSCError;
+public class OSCError extends Exception {
+	private static final long serialVersionUID = -1635557595316200871L;
+
+	public enum Error {
+		noerror, undefined, relocated, corrupt, mismatch, infeasable, missing, failed
+	}
+
+	private Error error = Error.noerror;
+
+	public OSCError(Error error) {
+		this.error = error;
+	}
+
+	public Error getCode() {
+		return error;
+	}
+
+	public String getDocumentation() {
+		return error.toString();
+	}
 }

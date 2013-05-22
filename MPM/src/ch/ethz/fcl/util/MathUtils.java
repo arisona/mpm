@@ -25,49 +25,18 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mpm.gl;
+package ch.ethz.fcl.util;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
-import com.jogamp.common.nio.Buffers;
-
-public class VBO {
-	int vbo;
-	int size;
-
-	public VBO(GL2 gl, float[] vertices) {
-		// generate a VBO pointer / handle
-		IntBuffer buf = Buffers.newDirectIntBuffer(1);
-		gl.glGenBuffers(1, buf);
-		vbo = buf.get();
-		size = vertices.length;
-
-		FloatBuffer data = Buffers.newDirectFloatBuffer(vertices);
-		data.rewind();
-
-		int bytesPerFloat = Float.SIZE / Byte.SIZE;
-
-		// transfer data to VBO
-		int numBytes = data.capacity() * bytesPerFloat;
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
-		gl.glBufferData(GL.GL_ARRAY_BUFFER, numBytes, data, GL.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+public final class MathUtils {
+	public static Vector3D toVector3D(RealVector v) {
+		return new Vector3D(v.getEntry(0), v.getEntry(1), v.getEntry(2));
 	}
-
-	public void render(GL2 gl, int mode) {
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
-		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-		gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
-		gl.glDrawArrays(mode, 0, size / 3);
-		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
-	}
-
-	public void dispose(GL2 gl) {
-		gl.glDeleteBuffers(1, new int[] { vbo }, 0);
+	
+	public static RealVector toRealVector(Vector3D v) {
+		return new ArrayRealVector(v.toArray(), false);
 	}
 }
