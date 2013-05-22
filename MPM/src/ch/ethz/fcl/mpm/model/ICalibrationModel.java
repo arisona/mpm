@@ -27,12 +27,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package ch.ethz.fcl.mpm.model;
 
-public interface IGeometryModel {
+import ch.ethz.fcl.mogl.scene.IModel;
+
+public interface ICalibrationModel extends IModel {
 	public void reset();
-	
-	public float[] getModelVertices();
-	
-	public float[] getModelEdges();
 	
 	public float[] getModelFaces();
 
@@ -40,9 +38,17 @@ public interface IGeometryModel {
 	
 	public float[] getModelColors();
 	
+	public float[] getCalibrationVertices();
+	
+	public float[] getCalibrationLines();
+	
 	public float[] getAxisLines();
 
 	public float[] getGridLines();
+	
+	public float getExtentX();
+	
+	public float getExtentY();
 
 	public void setTriangles(float[] faces, float[] colors);
 }

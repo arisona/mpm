@@ -27,46 +27,68 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package ch.ethz.fcl.mpm.model;
 
-public class BoxModel extends AbstractModel {
-		
-	private static final float[] MODEL_VERTICES = {
-		M, M, 0,
-		-M, M, 0,
-		-M, -M, 0,
-		M, -M, 0,
-		M, M, M,
-		-M, M, M,
-		-M, -M, M,
-		M, -M, M,
-	};
-
-	private static final float[] MODEL_EDGES = {
-		// bottom
-		M, M, 0, -M, M, 0,
-		-M, M, 0, -M, -M, 0,
-		-M, -M, 0, M, -M, 0,
-		M, -M, 0, M, M, 0,
-		
-		// top
-		M, M, 1, -M, M, 1,
-		-M, M, 1, -M, -M, 1,
-		-M, -M, 1, M, -M, 1,
-		M, -M, 1, M, M, 1,
-		
-		// side
-		M, M, 0, M, M, 1,
-		-M, M, 0, -M, M, 1,
-		-M, -M, 0, -M, -M, 1,
-		M, -M, 0, M, -M, 1
-	};
+public class BoxCalibrationModel extends AbstractCalibrationModel {
+	private float[] calibrationVertices;
+	private float[] calibrationLines;
+	private float boxExtentX;
+	private float boxExtentY;
+	private float boxExtentZ;
 	
+	public BoxCalibrationModel(int numGridLines, float gridSpacing, float boxXExtent, float boxYExtent, float boxZExtent) {
+		super(numGridLines, gridSpacing);
+		this.boxExtentX = boxXExtent;
+		this.boxExtentY = boxYExtent;
+		this.boxExtentZ = boxZExtent;
+	}
+
+
 	@Override
-	public float[] getModelVertices() {
-		return MODEL_VERTICES;
+	public float[] getCalibrationVertices() {
+		if (calibrationVertices == null) {
+			float dx = boxExtentX / 2;
+			float dy = boxExtentY / 2;
+			float dz = boxExtentZ;
+			calibrationVertices = new float[] {
+				dx, dy, 0,
+				-dx, dy, 0,
+				-dx, -dy, 0,
+				dx, -dy, 0,
+				dx, dy, dz,
+				-dx, dy, dz,
+				-dx, -dy, dz,
+				dx, -dy, dz,
+			};
+			
+		}
+		return calibrationVertices;
 	}
 
 	@Override
-	public float[] getModelEdges() {
-		return MODEL_EDGES;
+	public float[] getCalibrationLines() {
+		if (calibrationLines == null) {
+			float dx = boxExtentX / 2;
+			float dy = boxExtentY / 2;
+			float dz = boxExtentZ;
+			calibrationLines = new float[] {
+				// bottom
+				dx, dy, 0, -dx, dy, 0,
+				-dx, dy, 0, -dx, -dy, 0,
+				-dx, -dy, 0, dx, -dy, 0,
+				dx, -dy, 0, dx, dy, 0,
+				
+				// top
+				dx, dy, dz, -dx, dy, dz,
+				-dx, dy, dz, -dx, -dy, dz,
+				-dx, -dy, dz, dx, -dy, dz,
+				dx, -dy, dz, dx, dy, dz,
+				
+				// side
+				dx, dy, 0, dx, dy, dz,
+				-dx, dy, 0, -dx, dy, dz,
+				-dx, -dy, 0, -dx, -dy, dz,
+				dx, -dy, 0, dx, -dy, dz,
+			};
+		}
+		return calibrationLines;
 	}
 }

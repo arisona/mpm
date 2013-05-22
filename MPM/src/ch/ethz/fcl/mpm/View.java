@@ -38,7 +38,7 @@ import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.scene.AbstractView;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
 import ch.ethz.fcl.mpm.calibration.CalibrationContext;
-import ch.ethz.fcl.mpm.model.IGeometryModel;
+import ch.ethz.fcl.mpm.model.ICalibrationModel;
 
 public class View extends AbstractView {
 	public enum ViewType {
@@ -141,23 +141,14 @@ public class View extends AbstractView {
 		// fetch viewport, and projection/modelview matrices
 		fetchView(gl);
 
-		// XXX anti flicker: for some reason, our ATI card seems to flicker the first element drawn after a model update???
-		// so for now, just draw a fake line that nobody will see..
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3f(-1.1f, 0, 0);
-		gl.glVertex3f(-1.2f, 0, 0);
-		gl.glEnd();
-		
 		// draw static elements
-		if (viewType != ViewType.PROJECTION_VIEW) {
+		if (viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE) {
 			gl.glColor4fv(Scene.AXIS_COLOR, 0);
 			drawLines(gl, getModel().getAxisLines());
 	
 			drawText3D(drawable, "X", getModel().getAxisLines()[3], getModel().getAxisLines()[4], getModel().getAxisLines()[5]);
 			drawText3D(drawable, "Y", getModel().getAxisLines()[9], getModel().getAxisLines()[10], getModel().getAxisLines()[11]);
-		}
-		
-		if (viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE) {
+
 			gl.glColor4fv(Scene.GRID_COLOR, 0);
 			drawLines(gl, getModel().getGridLines());
 		}
@@ -280,16 +271,16 @@ public class View extends AbstractView {
 		return (Scene)super.getScene();
 	}
 
-	private IGeometryModel getModel() {
+	private ICalibrationModel getModel() {
 		return getScene().getModel();
 	}
 
 	private void updateVBOs(GL2 gl) {
-		if (vboVertices == null && getModel().getModelVertices() != null) {
-			vboVertices = new VBO(gl, getModel().getModelVertices());
+		if (vboVertices == null && getModel().getCalibrationVertices() != null) {
+			vboVertices = new VBO(gl, getModel().getCalibrationVertices());
 		}
-		if (vboEdges == null && getModel().getModelEdges() != null) {
-			vboEdges = new VBO(gl, getModel().getModelEdges());
+		if (vboEdges == null && getModel().getCalibrationLines() != null) {
+			vboEdges = new VBO(gl, getModel().getCalibrationLines());
 		}
 	}
 

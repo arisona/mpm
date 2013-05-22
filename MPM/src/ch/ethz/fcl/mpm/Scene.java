@@ -40,7 +40,7 @@ import ch.ethz.fcl.mpm.View.ViewType;
 import ch.ethz.fcl.mpm.calibration.BimberRaskarCalibrator;
 import ch.ethz.fcl.mpm.calibration.CalibrationContext;
 import ch.ethz.fcl.mpm.calibration.ICalibrator;
-import ch.ethz.fcl.mpm.model.IGeometryModel;
+import ch.ethz.fcl.mpm.model.ICalibrationModel;
 
 public class Scene extends AbstractScene<View> {
 	public static final String[] HELP = {
@@ -100,7 +100,7 @@ public class Scene extends AbstractScene<View> {
 	}
 	
 	
-	private IGeometryModel model;
+	private ICalibrationModel model;
 	private final ICalibrator calibrator = new BimberRaskarCalibrator();
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
@@ -111,11 +111,11 @@ public class Scene extends AbstractScene<View> {
 		setLightPosition(lightPosition);
 	}
 
-	public IGeometryModel getModel() {
+	public ICalibrationModel getModel() {
 		return model;
 	}
 	
-	public void setModel(IGeometryModel model) {
+	public void setModel(ICalibrationModel model) {
 		this.model = model;
 	}
 	
@@ -240,7 +240,7 @@ public class Scene extends AbstractScene<View> {
 			}
 			
 			// second, try to hit model point
-			float[] mv = getModel().getModelVertices();
+			float[] mv = getModel().getCalibrationVertices();
 			double[] vv = new double[3];
 			for (int i = 0; i < mv.length; i+=3) {
 				if (!view.projectToScreenCoordinates(mv[i], mv[i+1], mv[i+2], vv))
@@ -353,7 +353,6 @@ public class Scene extends AbstractScene<View> {
 			calibrate(v);
 			iv++;
 		}
-		//repaintAll();
 	}
 	
 	private void saveCalibration() {

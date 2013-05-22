@@ -28,82 +28,48 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ch.ethz.fcl.mpm.model;
 
 
-public abstract class AbstractModel implements IGeometryModel {
-	public static final float M = 0.1f;
-	
-	private static final float[] AXIS_LINES = {
-		-10.5f*M, 0, 0, 10.5f*M, 0, 0,
-		0, -10.5f*M, 0, 0, 10.5f*M, 0
-	};
+public class SampleCalibrationModel extends BoxCalibrationModel {
+	public SampleCalibrationModel() {
+		super(10, 0.1f, 0.5f, 0.5f, 0.5f);
+		reset();
+	}
 
-	private static final float[] GRID_LINES = {
-		-5*M, -5*M, 0, -5*M, 5*M, 0,
-		-4*M, -5*M, 0, -4*M, 5*M, 0,
-		-3*M, -5*M, 0, -3*M, 5*M, 0,
-		-2*M, -5*M, 0, -2*M, 5*M, 0,
-		-1*M, -5*M, 0, -1*M, 5*M, 0,
-		1*M, -5*M, 0, 1*M, 5*M, 0,
-		2*M, -5*M, 0, 2*M, 5*M, 0,
-		3*M, -5*M, 0, 3*M, 5*M, 0,
-		4*M, -5*M, 0, 4*M, 5*M, 0,
-		5*M, -5*M, 0, 5*M, 5*M, 0,
-		
-		-5*M, -5*M, 0, 5*M, -5*M, 0,
-		-5*M, -4*M, 0, 5*M, -4*M, 0,
-		-5*M, -3*M, 0, 5*M, -3*M, 0,
-		-5*M, -2*M, 0, 5*M, -2*M, 0,
-		-5*M, -1*M, 0, 5*M, -1*M, 0,
-		-5*M, 1*M, 0, 5*M, 1*M, 0,
-		-5*M, 2*M, 0, 5*M, 2*M, 0,
-		-5*M, 3*M, 0, 5*M, 3*M, 0,
-		-5*M, 4*M, 0, 5*M, 4*M, 0,
-		-5*M, 5*M, 0, 5*M, 5*M, 0,
-
-/*		
-		-2*M, -2*M, 0, 2*M, -2*M, 0,
-		-2*M, -M, 0, 2*M, -M, 0,
-		-2*M, M, 0, 2*M, M, 0,
-		-2*M, 2*M, 0, 2*M, 2*M, 0,
-
-		-2*M, -2*M, 0, -2*M, 2*M, 0,
-		-M, -2*M, 0, -M, 2*M, 0,
-		M, -2*M, 0, M, 2*M, 0,
-		2*M, -2*M, 0, 2*M, 2*M, 0
-*/
-	};
+	private float[] faces;
+	private float[] normals;
+	private float[] colors;
 	
 	@Override
 	public void reset() {
+		float[] faces = new float[4 * UNIT_CUBE_FACES.length];
+		addCube(faces, 0, -0.3f, -0.3f, 0.1f, 0.1f, 0.1f);
+		addCube(faces, 1, 0.1f, -0.2f, 0.2f, 0.1f, 0.2f);
+		addCube(faces, 2, 0f, 0f, 0.1f, 0.2f, 0.1f);
+		addCube(faces, 3, 0.2f, 0.1f, 0.1f, 0.1f, 0.2f);
+		setTriangles(faces, null);
 	}
 	
 	@Override
 	public float[] getModelFaces() {
-		return null;
+		return faces;
 	}
-	
+
 	@Override
 	public float[] getModelNormals() {
-		return null;
+		if (normals == null) {
+			normals = calculateNormals(getModelFaces());
+		}
+		return normals;
 	}
 	
 	@Override
 	public float[] getModelColors() {
-		return null;
+		return colors;
 	}
-
-	@Override
-	public float[] getAxisLines() {
-		return AXIS_LINES;
-	}
-	
-	@Override
-	public float[] getGridLines() {
-		return GRID_LINES;
-	}
-	
 	
 	@Override
 	public void setTriangles(float[] faces, float[] colors) {
-		throw new UnsupportedOperationException("setTriangles unsupported");
-	}
+		this.faces = faces;
+		this.colors = colors;
+		this.normals = null;
+	}	
 }

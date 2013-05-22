@@ -37,7 +37,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
 /**
- * A 'view' here is view with some control functionality, i.e. it handles the
+ * A 'view' here is a view with some control functionality, i.e. it handles the
  * rendering of the model and also the user input specific to the view.
  * 
  * @author radar

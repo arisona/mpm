@@ -41,16 +41,19 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 
 	@Override
 	public void renderModel(GL2 gl, View view) {
+		float ex = view.getScene().getModel().getExtentX() / 2;
+		float ey = view.getScene().getModel().getExtentY() / 2;
+		
 		// enable depth test
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 
 		// render ground plane
 		gl.glColor4fv(Scene.GRID_COLOR, 0);
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex3f(-0.5f, -0.5f, -0.001f);
-		gl.glVertex3f(0.5f, -0.5f, -0.001f);
-		gl.glVertex3f(0.5f, 0.5f, -0.001f);
-		gl.glVertex3f(-0.5f, 0.5f, -0.001f);
+		gl.glVertex3f(-ex, -ey, -0.001f);
+		gl.glVertex3f(ex, -ey, -0.001f);
+		gl.glVertex3f(ex, ey, -0.001f);
+		gl.glVertex3f(-ex, ey, -0.001f);
 		gl.glEnd();
 
 		// render geometry
