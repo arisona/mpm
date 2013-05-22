@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/jogl/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/jogl-all.jar" sourcepath="lib/jogl/jogl-java-src.zip"/>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/commons-math3/commons-math3-3.1.1.jar" sourcepath="lib/commons-math3/commons-math3-3.1.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ProjectorCalibration/lib/commons-math3/commons-math3-3.1.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
