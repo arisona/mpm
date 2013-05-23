@@ -147,7 +147,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		float[] lightPosition = view.getScene().getLightPosition();
 		
 		for (int i = 0; i < vertices.length; i+=9) {
-			if (dot(lightPosition, 0, normals, i) < 0) {
+			if (isFacingLight(vertices, normals, i, lightPosition)) {
 				_f[0] = vertices[i+0];
 				_f[1] = vertices[i+1];
 				_f[2] = vertices[i+2];
@@ -242,8 +242,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		gl.glEnd();		
 	}
 
-
-	private static float dot(float v1[], int i1, float v2[], int i2) {
-		return (v1[i1] * v2[i2] + v1[i1 + 1] * v2[i2 + 1] + v1[i1 + 2] * v2[i2 + 2]);
+	private static boolean isFacingLight(float v[], float n[], int i, float[] light) {
+		return ((light[0] - v[i+0]) * n[i+0] + (light[1] - v[i+1]) * n[i+1] + (light[2] - v[i+2]) * n[i+2]) < 0;
 	}
 }
