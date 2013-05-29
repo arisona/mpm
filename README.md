@@ -6,7 +6,7 @@ Java / OpenGL based framework for multi-projector 3D mapping and more.
 Overview
 --------
 
-The multi-projector-mapper (MPM) is a software framework for 3D projection mapping using multiple projector. It contains a basic rendering infrastructure, and interactive tools for projector calibration. For calibration, the method given in Oliver Bimber and Ramesh Raskar's book "Spatial Augmented Reality" (http://www.amazon.com/Spatial-Augmented-Reality-Merging-Virtual/dp/1568812302), Appendix A, is used.
+The multi-projector-mapper (MPM) is a software framework for 3D projection mapping using multiple projectors. It contains a basic rendering infrastructure, and interactive tools for projector calibration. For calibration, the method given in Oliver Bimber and Ramesh Raskar's book "Spatial Augmented Reality" (http://www.amazon.com/Spatial-Augmented-Reality-Merging-Virtual/dp/1568812302), Appendix A, is used.
 
 The framework is the outcome of the "Projections of Reality" cluster at smartgeometry 2013 (http://www.smartgeometry.org/), and is to be seen as a prototype that can be used for developing specialized projection mapping applications. The projector calibration method alone could also be used to output the OpenGL projection and modelview matrices, that then can be used by other applications. Also, the more generic code might serve as well as a starting point for those who want to dive into pure Java / OpenGL coding (e.g. when coming from Processing).
 
