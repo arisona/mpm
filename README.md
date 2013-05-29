@@ -21,6 +21,8 @@ The repository contains an Eclipse project, including dependencies such as JOGL 
 Further Info & Contact
 ----------------------
 
+For a brief tutorial, go to http://www.arisona.ch/web/mpm/
+
 A general overview of the "Projections of Reality" work is at http://www.arisona.ch/web/projections-of-reality/
 
 Also, there's a short video documentation at https://vimeo.com/65130490
