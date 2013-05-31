@@ -15,6 +15,7 @@ import ch.ethz.fcl.net.osc.OSCHandler;
 import ch.ethz.fcl.net.osc.OSCServer;
 import ch.ethz.fcl.net.util.UDPServer;
 
+// XXX experimental
 // XXX suppress "unused" warnings, as geometry server features are frequently disabled
 @SuppressWarnings("unused")
 public class GeometryServer {

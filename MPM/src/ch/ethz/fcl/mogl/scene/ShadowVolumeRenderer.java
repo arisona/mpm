@@ -33,7 +33,11 @@ import javax.media.opengl.GL2;
 import ch.ethz.fcl.mpm.Scene;
 import ch.ethz.fcl.mpm.View;
 
-// very basic and slow shadow volume renderer
+/**
+ * Very basic shadow volume renderer.
+ * @author radar
+ * 
+ */
 // XXX lots to do (silhouettes, shader optimizations, etc...)
 
 public class ShadowVolumeRenderer implements IRenderer<View> {

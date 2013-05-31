@@ -2,12 +2,19 @@ package ch.ethz.fcl.mogl.gl;
 
 public final class ProjectionUtilities {
 	/**
-	 * Returns a perspective projection matrix. Same as gluPerspective, but with support for far plane at infinity.
-	 * @param fovy Field of view (degrees)
-	 * @param aspect Aspect ratio
-	 * @param near Near plane
-	 * @param far Far plane (set to Double.POSITIVE_INFINITY for far plane at infinity)
-	 * @return Column first perspective projection matrix
+	 * Returns a perspective projection matrix. Same as gluPerspective, but with
+	 * support for far plane at infinity.
+	 * 
+	 * @param fovy
+	 *            field of view (degrees)
+	 * @param aspect
+	 *            aspect ratio
+	 * @param near
+	 *            near plane
+	 * @param far
+	 *            far plane (set to Double.POSITIVE_INFINITY for far plane at
+	 *            infinity)
+	 * @return column first perspective projection matrix
 	 */
 	public static double[] getPerspectiveMatrix(double fovy, double aspect, double near, double far) {
 		final double radians = fovy / 2 * Math.PI / 180;
@@ -28,5 +35,5 @@ public final class ProjectionUtilities {
 		m[11] = -1;
 		m[14] = far >= Double.POSITIVE_INFINITY ? -2 * near : -2 * near * far / deltaZ;
 		return m;
-	}	
+	}
 }

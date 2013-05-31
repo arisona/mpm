@@ -5,12 +5,12 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, 
   this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
-* Neither the name of ETH Zurich nor the names of its contributors may be 
+ * Neither the name of ETH Zurich nor the names of its contributors may be 
   used to endorse or promote products derived from this software without
   specific prior written permission.
 
@@ -24,7 +24,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 package ch.ethz.fcl.net.util;
 
 import java.io.IOException;
@@ -38,12 +38,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.SwingUtilities;
 
-
 public class UDPServer {
 	public interface UDPHandler {
 		void handle(DatagramPacket packet);
 	}
-	
+
 	private static final int RECEIVE_BUFFER_SIZE = 1024 * 1024;
 	private static final int SEND_BUFFER_SIZE = 1024 * 1024;
 
@@ -52,7 +51,6 @@ public class UDPServer {
 	private final UDPHandler handler;
 
 	private final BlockingQueue<DatagramPacket> receiveQueue = new LinkedBlockingQueue<DatagramPacket>();
-	
 
 	private final AtomicBoolean awtPending = new AtomicBoolean();
 
@@ -82,7 +80,7 @@ public class UDPServer {
 				awtPending.set(false);
 			}
 		};
-		
+
 		final Thread receiveThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -94,7 +92,8 @@ public class UDPServer {
 						receiveQueue.add(packet);
 						if (!awtPending.getAndSet(true))
 							SwingUtilities.invokeLater(awtHandler);
-					} catch (Exception e) {}
+					} catch (Exception e) {
+					}
 				}
 			}
 		});

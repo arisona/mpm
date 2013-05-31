@@ -5,12 +5,12 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, 
   this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
-* Neither the name of ETH Zurich nor the names of its contributors may be 
+ * Neither the name of ETH Zurich nor the names of its contributors may be 
   used to endorse or promote products derived from this software without
   specific prior written permission.
 
@@ -24,7 +24,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 package ch.ethz.fcl.mpm;
 
 import java.awt.event.KeyEvent;
@@ -43,8 +43,9 @@ import ch.ethz.fcl.mpm.calibration.ICalibrator;
 import ch.ethz.fcl.mpm.model.ICalibrationModel;
 
 public class Scene extends AbstractScene<View> {
+	// @formatter:off
 	public static final String[] HELP = {
-		"[1] Navigation Mode",
+		"[1] Rendering/Navigation Mode",
 		"[2] Calibration Mode",
 		"[3] Fill Mode",
 		"",
@@ -59,8 +60,8 @@ public class Scene extends AbstractScene<View> {
 		"",
 		"[ESC] Quit"
 	};
-	
-	
+	// @formatter:on
+
 	public static final float[] MODEL_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
 	public static final float[] AXIS_COLOR = { 1.0f, 1.0f, 1.0f, 0.75f };
 	public static final float[] GRID_COLOR = { 1.0f, 1.0f, 1.0f, 0.5f };
@@ -68,45 +69,42 @@ public class Scene extends AbstractScene<View> {
 	public static final float[] CALIBRATION_COLOR_CALIBRATED = { 0.0f, 1.0f, 0.0f, 1.0f };
 
 	public static final int SNAP_SIZE = 4;
-	
+
 	public static final double CROSSHAIR_SIZE = 20.0;
-	
+
 	public static final double CAMERA_TRANSLATE_SCALE = 0.01;
 	public static final double CAMERA_ROTATE_SCALE = 1.0;
-	
+
 	public static final double MAX_CALIBRATION_ERROR = 0.5;
 
 	private float[] lightPosition = { 10.0f, 6.0f, 8.0f };
 
 	public enum ControlMode {
-		NAVIGATE("Mode: Navigation"),
-		CALIBRATE("Mode: Calibration"),
-		FILL("Mode: Fill");
-		
+		NAVIGATE("Mode: Navigation"), CALIBRATE("Mode: Calibration"), FILL("Mode: Fill");
+
 		ControlMode(String text) {
 			this.text = text;
 		}
-		
+
 		private final String text;
-		
+
 		public String getText() {
 			return text;
 		}
-		
+
 		@Override
 		public String toString() {
 			return text;
 		}
 	}
-	
-	
+
 	private ICalibrationModel model;
 	private final ICalibrator calibrator = new BimberRaskarCalibrator();
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
 	private ControlMode mode = ControlMode.NAVIGATE;
 	private View selectedView = null;
-	
+
 	public Scene() {
 		setLightPosition(lightPosition);
 	}
@@ -114,19 +112,19 @@ public class Scene extends AbstractScene<View> {
 	public ICalibrationModel getModel() {
 		return model;
 	}
-	
+
 	public void setModel(ICalibrationModel model) {
 		this.model = model;
 	}
-	
+
 	public ShadowVolumeRenderer getRenderer() {
 		return renderer;
 	}
-	
+
 	public void modelChanged() {
 		repaintAll();
 	}
-	
+
 	public ControlMode getControlMode() {
 		return mode;
 	}
@@ -135,29 +133,29 @@ public class Scene extends AbstractScene<View> {
 		if (mode == ControlMode.CALIBRATE) {
 			return mode.getText() + " (View " + selectedView.getViewIndex() + ")";
 		} else if (mode == ControlMode.FILL) {
-			return mode.getText() + " (Fill " + selectedView.getViewIndex() + ")";			
+			return mode.getText() + " (Fill " + selectedView.getViewIndex() + ")";
 		}
 		return mode.getText();
 	}
-	
+
 	public ICalibrator getCalibrator() {
 		return calibrator;
 	}
-	
+
 	public boolean isEnabled(View view) {
 		if (view.getViewType() == ViewType.CONTROL_VIEW)
 			return true;
-		
+
 		if (mode == ControlMode.CALIBRATE || mode == ControlMode.FILL) {
 			if (view == selectedView)
 				return true;
 			else
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e, View view) {
 		switch (e.getKeyCode()) {
@@ -208,7 +206,7 @@ public class Scene extends AbstractScene<View> {
 		}
 		repaintAll();
 	}
-	
+
 	// mouse handling
 	private int button;
 	private int mouseX;
@@ -226,7 +224,7 @@ public class Scene extends AbstractScene<View> {
 
 			// reset first
 			context.currentSelection = -1;
-			
+
 			// first, try to hit calibration point
 			for (int i = 0; i < context.projectedVertices.size(); ++i) {
 				int x = view.deviceToScreenX(context.projectedVertices.get(i).getX());
@@ -238,22 +236,22 @@ public class Scene extends AbstractScene<View> {
 					return;
 				}
 			}
-			
+
 			// second, try to hit model point
 			float[] mv = getModel().getCalibrationVertices();
 			double[] vv = new double[3];
-			for (int i = 0; i < mv.length; i+=3) {
-				if (!view.projectToScreenCoordinates(mv[i], mv[i+1], mv[i+2], vv))
+			for (int i = 0; i < mv.length; i += 3) {
+				if (!view.projectToScreenCoordinates(mv[i], mv[i + 1], mv[i + 2], vv))
 					continue;
-				if (snap2D(e.getX(), view.getHeight() - e.getY(), (int)vv[0], (int)vv[1])) {
-					Vector3D a = new Vector3D(mv[i], mv[i+1], mv[i+2]);
+				if (snap2D(e.getX(), view.getHeight() - e.getY(), (int) vv[0], (int) vv[1])) {
+					Vector3D a = new Vector3D(mv[i], mv[i + 1], mv[i + 2]);
 					int index = context.modelVertices.indexOf(a);
 					if (index != -1) {
 						context.currentSelection = index;
 					} else {
 						context.currentSelection = context.modelVertices.size();
 						context.modelVertices.add(a);
-						context.projectedVertices.add(new Vector3D(view.screenToDeviceX((int)vv[0]), view.screenToDeviceY((int)vv[1]), 0));
+						context.projectedVertices.add(new Vector3D(view.screenToDeviceX((int) vv[0]), view.screenToDeviceY((int) vv[1]), 0));
 					}
 					calibrate(view);
 					view.repaint();
@@ -266,8 +264,7 @@ public class Scene extends AbstractScene<View> {
 	@Override
 	public void mouseDragged(MouseEvent e, View view) {
 		switch (mode) {
-		case CALIBRATE:
-		{
+		case CALIBRATE: {
 			CalibrationContext context = view.getCalibrationContext();
 			if (context.currentSelection != -1) {
 				Vector3D a = new Vector3D(view.screenToDeviceX(e.getX()), view.screenToDeviceY(view.getHeight() - e.getY()), 0);
@@ -285,22 +282,22 @@ public class Scene extends AbstractScene<View> {
 				view.addToRotateX(CAMERA_ROTATE_SCALE * (e.getY() - mouseY));
 			} else if (e.getButton() == MouseEvent.BUTTON3) {
 				view.addToTranslateX(CAMERA_TRANSLATE_SCALE * (e.getX() - mouseX));
-				view.addToTranslateY(CAMERA_TRANSLATE_SCALE *  (mouseY - e.getY()));				
+				view.addToTranslateY(CAMERA_TRANSLATE_SCALE * (mouseY - e.getY()));
 			}
 			// fall through
 		default:
 			mouseX = e.getX();
-			mouseY = e.getY();			
+			mouseY = e.getY();
 		}
 		view.repaint();
 	}
-	
+
 	@Override
 	public void mouseMoved(MouseEvent e, View view) {
 		mouseX = e.getX();
 		mouseY = e.getY();
 	}
-	
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e, View view) {
 		if (view.getCalibrationContext().calibrated)
@@ -308,23 +305,24 @@ public class Scene extends AbstractScene<View> {
 		view.addToCameraDistance(0.25 * e.getWheelRotation());
 		view.repaint();
 	}
-	
+
 	private void calibrate(View view) {
 		try {
 			CalibrationContext context = view.getCalibrationContext();
 			context.calibrated = false;
-			
+
 			double error = getCalibrator().calibrate(context.modelVertices, context.projectedVertices, View.NEAR, View.FAR);
 			if (error < MAX_CALIBRATION_ERROR)
 				context.calibrated = true;
-	
+
 			view.setProjectionMatrix(getCalibrator().getProjectionMatrix());
 			view.setModelviewMatrix(getCalibrator().getModelviewMatrix());
 			view.repaint();
-			//System.out.println("error: " + error);
-		} catch (Throwable t) {}
+			// System.out.println("error: " + error);
+		} catch (Throwable t) {
+		}
 	}
-	
+
 	private void cursorAdjust(View view, double dx, double dy) {
 		CalibrationContext context = view.getCalibrationContext();
 		if (context.currentSelection != -1) {
@@ -332,9 +330,9 @@ public class Scene extends AbstractScene<View> {
 			Vector3D a = new Vector3D(p.getX() + dx / view.getWidth(), p.getY() + dy / view.getHeight(), 0.0);
 			context.projectedVertices.set(context.currentSelection, a);
 			calibrate(view);
-		}		
+		}
 	}
-	
+
 	private void deleteCurrent(View view) {
 		CalibrationContext context = view.getCalibrationContext();
 		if (context.currentSelection != -1) {
@@ -342,9 +340,9 @@ public class Scene extends AbstractScene<View> {
 			context.projectedVertices.remove(context.currentSelection);
 			context.currentSelection = -1;
 			calibrate(view);
-		}		
+		}
 	}
-	
+
 	private void loadCalibration() {
 		Preferences p = PreferencesStore.get();
 		int iv = 0;
@@ -354,7 +352,7 @@ public class Scene extends AbstractScene<View> {
 			iv++;
 		}
 	}
-	
+
 	private void saveCalibration() {
 		Preferences p = PreferencesStore.get();
 		int iv = 0;
@@ -363,7 +361,7 @@ public class Scene extends AbstractScene<View> {
 			iv++;
 		}
 	}
-	
+
 	private static final boolean snap2D(int mx, int my, int x, int y) {
 		if ((mx >= x - SNAP_SIZE) && (mx <= x + SNAP_SIZE) && (my >= y - SNAP_SIZE) && (my < y + SNAP_SIZE))
 			return true;
@@ -373,7 +371,7 @@ public class Scene extends AbstractScene<View> {
 	public float[] getLightPosition() {
 		return lightPosition.clone();
 	}
-	
+
 	public void setLightPosition(float[] position) {
 		lightPosition = position;
 	}

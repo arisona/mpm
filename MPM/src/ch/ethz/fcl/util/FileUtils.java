@@ -30,9 +30,14 @@ package ch.ethz.fcl.util;
 import java.io.File;
 
 public class FileUtils {
-	public static String getExtension(File f) {
+	/**
+	 * Get file extension.
+	 * @param file file to get the extension from
+	 * @return file extension (without '.')
+	 */
+	public static String getExtension(File file) {
         String ext = "";
-        String s = f.getName();
+        String s = file.getName();
         int i = s.lastIndexOf('.');
 
         if (i > 0 &&  i < s.length() - 1) {
