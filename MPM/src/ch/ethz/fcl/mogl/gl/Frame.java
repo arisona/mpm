@@ -27,9 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package ch.ethz.fcl.mogl.gl;
 
-import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
-import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
-
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -103,7 +100,7 @@ public final class Frame extends GLCanvas {
 			public void init(GLAutoDrawable drawable) {
 				GL2 gl = drawable.getGL().getGL2();
 				gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-				gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 				glu = new GLU();
 				if (view != null)
 					view.init(drawable, gl, glu);
