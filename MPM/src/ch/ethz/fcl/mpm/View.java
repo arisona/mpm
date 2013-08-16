@@ -34,10 +34,10 @@ import javax.media.opengl.glu.GLU;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+import ch.ethz.fcl.mogl.gl.DrawingUtils;
 import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.mapping.CalibrationContext;
-import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.scene.AbstractView;
 import ch.ethz.fcl.mogl.scene.Camera;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
@@ -163,13 +163,13 @@ public class View extends AbstractView {
 		// draw static elements
 		if (viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE) {
 			gl.glColor4fv(Scene.AXIS_COLOR, 0);
-			drawLines(gl, getScene().getNavigationGrid().getAxisLines());
+			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getAxisLines());
 
 			drawText3D(drawable, "X", getScene().getNavigationGrid().getAxisLines()[3], getScene().getNavigationGrid().getAxisLines()[4], getScene().getNavigationGrid().getAxisLines()[5]);
 			drawText3D(drawable, "Y", getScene().getNavigationGrid().getAxisLines()[9], getScene().getNavigationGrid().getAxisLines()[10], getScene().getNavigationGrid().getAxisLines()[11]);
 
 			gl.glColor4fv(Scene.GRID_COLOR, 0);
-			drawLines(gl, getScene().getNavigationGrid().getGridLines());
+			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getGridLines());
 		}
 
 		// draw model elements
@@ -260,10 +260,6 @@ public class View extends AbstractView {
 
 	// private stuff
 
-	private ITriangleModel getModel() {
-		return getScene().getModel();
-	}
-
 	private void updateVBOs(GL2 gl) {
 		// XXX FIXME
 		//if (vboVertices == null && getModel().getCalibrationVertices() != null) {
@@ -274,21 +270,4 @@ public class View extends AbstractView {
 		//}
 	}
 
-	// rendering helpers (for non-vbo use)
-
-	public static void drawPoints(GL2 gl, float[] vertices) {
-		gl.glBegin(GL2.GL_POINTS);
-		for (int i = 0; i < vertices.length; i += 3) {
-			gl.glVertex3fv(vertices, i);
-		}
-		gl.glEnd();
-	}
-
-	public static void drawLines(GL2 gl, float[] vertices) {
-		gl.glBegin(GL2.GL_LINES);
-		for (int i = 0; i < vertices.length; i += 3) {
-			gl.glVertex3fv(vertices, i);
-		}
-		gl.glEnd();
-	}
 }

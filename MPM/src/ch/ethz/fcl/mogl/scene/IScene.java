@@ -32,6 +32,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.List;
 
+import ch.ethz.fcl.mogl.model.IModel;
+
 /**
  * A 'scene' is the controller that coordinates both model and associated views.
  * It also handles the relevant events coming from individual views.
@@ -40,6 +42,17 @@ import java.util.List;
  * 
  */
 public interface IScene {
+	/**
+	 * Get the scene's model
+	 * @return model
+	 */
+	IModel getModel();
+	
+	/**
+	 * Set the scene's model
+	 * @param model to be set
+	 */
+	void setModel(IModel model);
 
 	/**
 	 * Add a view to the scene.

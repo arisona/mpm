@@ -49,7 +49,6 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * @author radar
  * 
  */
-// XXX currently contains stuff that doesn't belong here (e.g. text renderer).
 public abstract class AbstractView implements IView {
 	private static final Font FONT = new Font("SansSerif", Font.BOLD, 12);
 

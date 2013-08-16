@@ -33,6 +33,8 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.ethz.fcl.mogl.model.IModel;
+
 /**
  * Abstract scene class that implements some basic common functionality. Use as
  * base for common implementations.
@@ -41,11 +43,22 @@ import java.util.List;
  * 
  */
 public abstract class AbstractScene implements IScene {
+	private IModel model;
 	private final ArrayList<IView> views = new ArrayList<IView>();
 	private final NavigationTool navigationTool = new NavigationTool();
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
 	private ITool currentTool = new NullTool();
+	
+	@Override
+	public IModel getModel() {
+		return model;
+	}
+	
+	@Override
+	public void setModel(IModel model) {
+		this.model = model;
+	}
 	
 	@Override
 	public void addView(IView view) {

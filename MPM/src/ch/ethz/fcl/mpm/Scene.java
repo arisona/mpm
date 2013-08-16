@@ -30,7 +30,6 @@ package ch.ethz.fcl.mpm;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.render.ShadowVolumeRenderer;
 import ch.ethz.fcl.mogl.scene.AbstractScene;
 import ch.ethz.fcl.mogl.scene.IView;
@@ -85,7 +84,6 @@ public class Scene extends AbstractScene {
 		}
 	}
 
-	private ITriangleModel model;
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
 	private ControlMode mode = ControlMode.NAVIGATE;
@@ -93,14 +91,6 @@ public class Scene extends AbstractScene {
 
 	public Scene() {
 		setLightPosition(lightPosition);
-	}
-
-	public ITriangleModel getModel() {
-		return model;
-	}
-
-	public void setModel(ITriangleModel model) {
-		this.model = model;
 	}
 
 	public ShadowVolumeRenderer getRenderer() {
