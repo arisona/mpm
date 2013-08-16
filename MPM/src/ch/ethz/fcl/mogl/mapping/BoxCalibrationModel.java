@@ -25,24 +25,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package ch.ethz.fcl.mpm.model;
+package ch.ethz.fcl.mogl.mapping;
 
-public class BoxCalibrationModel extends AbstractCalibrationModel {
+
+public class BoxCalibrationModel implements ICalibrationModel {
 	private float[] calibrationVertices;
 	private float[] calibrationLines;
 	private float boxExtentX;
 	private float boxExtentY;
 	private float boxExtentZ;
 	private float planeExtentX;
-	private float planeExtendY;
+	private float planeExtentY;
 
-	public BoxCalibrationModel(int numGridLines, float gridSpacing, float boxExtentX, float boxExtentY, float boxExtentZ, float planeExtentX, float planeExtentY) {
-		super(numGridLines, gridSpacing);
+	public BoxCalibrationModel(float boxExtentX, float boxExtentY, float boxExtentZ, float planeExtentX, float planeExtentY) {
 		this.boxExtentX = boxExtentX;
 		this.boxExtentY = boxExtentY;
 		this.boxExtentZ = boxExtentZ;
 		this.planeExtentX = planeExtentX;
-		this.planeExtendY = planeExtentY;
+		this.planeExtentY = planeExtentY;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BoxCalibrationModel extends AbstractCalibrationModel {
 			float by = boxExtentY / 2;
 			float bz = boxExtentZ;
 			float px = planeExtentX / 2;
-			float py = planeExtendY / 2;
+			float py = planeExtentY / 2;
 			calibrationVertices = new float[] { bx, by, 0, -bx, by, 0, -bx, -by, 0, bx, -by, 0, bx, by, bz, -bx, by, bz, -bx, -by, bz, bx, -by, bz, px, py, 0,
 					-px, py, 0, -px, -py, 0, px, -py, 0 };
 

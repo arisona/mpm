@@ -25,30 +25,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package ch.ethz.fcl.mpm.model;
+package ch.ethz.fcl.mpm;
 
-import ch.ethz.fcl.mogl.scene.IModel;
+import ch.ethz.fcl.mogl.model.DefaultTriangleModel;
+import ch.ethz.fcl.mogl.model.ModelUtils;
 
-public interface ICalibrationModel extends IModel {
-	public void reset();
 
-	public float[] getModelFaces();
-
-	public float[] getModelNormals();
-
-	public float[] getModelColors();
-
-	public float[] getCalibrationVertices();
-
-	public float[] getCalibrationLines();
-
-	public float[] getAxisLines();
-
-	public float[] getGridLines();
-
-	public float getExtentX();
-
-	public float getExtentY();
-
-	public void setTriangles(float[] faces, float[] colors);
+public class SampleTriangleModel extends DefaultTriangleModel {
+	public SampleTriangleModel() {
+		reset();
+	}
+	
+	public void reset() {
+		float[] faces = new float[4 * ModelUtils.UNIT_CUBE_FACES.length];
+		ModelUtils.addCube(faces, 0, -0.3f, -0.3f, 0.1f, 0.1f, 0.1f);
+		ModelUtils.addCube(faces, 1, 0.1f, -0.2f, 0.2f, 0.1f, 0.2f);
+		ModelUtils.addCube(faces, 2, 0f, 0f, 0.1f, 0.2f, 0.1f);
+		ModelUtils.addCube(faces, 3, 0.2f, 0.1f, 0.1f, 0.1f, 0.2f);
+		setTriangles(faces, null);
+	}
 }

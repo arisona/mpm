@@ -25,46 +25,50 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package ch.ethz.fcl.util;
 
-package ch.ethz.fcl.mpm;
+import java.util.prefs.Preferences;
 
-import javax.swing.SwingUtilities;
+public class PreferencesStore {
+	private static Preferences preferences;
 
-import ch.ethz.fcl.mogl.model.DefaultTriangleModel;
-import ch.ethz.fcl.mogl.model.ITriangleModel;
-
-public final class MPM {
-	private Scene scene;
-
-	public static void main(String[] args) {
-		// Make sure everything runs on GUI thread...
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new MPM();
-			}
-		});
+	public static Preferences get() {
+		if (preferences == null)
+			preferences = Preferences.userRoot().node(PreferencesStore.class.getName());
+		return preferences;
 	}
 
-	/*
-	 * Creates a sample scene with 1 control view and 4 projector views, each
-	 * with 90 degrees rotation around the scene. Uses the sample calibration
-	 * model with a calibration rig of 0.5 units (~meters) edge lenght, and an
-	 * additional square 4 points at 0.8 units.
+	/**
+	 * Stores a 4x4 matrix to the preferences store with given key.
+	 * 
+	 * @param key
+	 *            key for the matrix to store
+	 * @param matrix
+	 *            matrix (4x4) to be stored
 	 */
-	public MPM() {
-		ITriangleModel model = new DefaultTriangleModel();
+	public void putMatrix4x4(String key, double[] matrix) {
+		assert (matrix.length == 16);
+		get().putBoolean(key + "_matrix", true);
+		for (int i = 0; i < matrix.length; ++i)
+			get().putDouble(key + "_" + i, matrix[i]);
+	}
 
-		scene = new Scene();
-		scene.setModel(model);
+	/**
+	 * Reads a 4x4 matrix from preferences store with given key.
+	 * 
+	 * @param key
+	 *            key for the matrix to read
+	 * @return the stored matrix or null if no matrix exists in store for given
+	 *         key.
+	 */
+	public double[] getMatrix4x4(String key) {
+		if (!get().getBoolean(key + "_matrix", false))
+			return null;
 
-		scene.addView(new View(scene, 0, 10, 512, 512, "View 0", 0, 0.0, View.ViewType.CONTROL_VIEW));
-		scene.addView(new View(scene, 530, 0, 400, 400, "View 1", 1, 0.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 940, 0, 400, 400, "View 2", 2, 90.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 530, 410, 400, 400, "View 3", 3, 180.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 940, 410, 400, 400, "View 4", 4, 270.0, View.ViewType.PROJECTION_VIEW));
-
-		// XXX geometry server disabled
-		// new GeometryServer(scene);
+		double[] matrix = new double[16];
+		for (int i = 0; i < matrix.length; ++i) {
+			matrix[i] = get().getDouble(key + "_" + i, 0.0);
+		}
+		return matrix;
 	}
 }

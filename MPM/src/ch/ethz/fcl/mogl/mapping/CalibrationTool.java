@@ -1,4 +1,4 @@
-package ch.ethz.fcl.mpm;
+package ch.ethz.fcl.mogl.mapping;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -7,15 +7,19 @@ import java.util.prefs.Preferences;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import ch.ethz.fcl.mogl.scene.AbstractTool;
-import ch.ethz.fcl.mpm.calibration.BimberRaskarCalibrator;
-import ch.ethz.fcl.mpm.calibration.CalibrationContext;
-import ch.ethz.fcl.mpm.calibration.ICalibrator;
+import ch.ethz.fcl.mpm.View;
+import ch.ethz.fcl.util.PreferencesStore;
 
 public final class CalibrationTool extends AbstractTool<View> {
 	public static final double MAX_CALIBRATION_ERROR = 0.5;
 
 	private final ICalibrator calibrator = new BimberRaskarCalibrator();
+	private final ICalibrationModel model;
 
+	public CalibrationTool(ICalibrationModel model) {
+		this.model = model;
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent e, View view) {
 		switch (e.getKeyCode()) {
@@ -70,7 +74,7 @@ public final class CalibrationTool extends AbstractTool<View> {
 		}
 
 		// second, try to hit model point
-		float[] mv = view.getScene().getModel().getCalibrationVertices();
+		float[] mv = model.getCalibrationVertices();
 		double[] vv = new double[3];
 		for (int i = 0; i < mv.length; i += 3) {
 			if (!view.projectToScreenCoordinates(mv[i], mv[i + 1], mv[i + 2], vv))

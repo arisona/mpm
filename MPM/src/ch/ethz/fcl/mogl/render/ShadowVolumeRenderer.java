@@ -25,11 +25,15 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package ch.ethz.fcl.mogl.scene;
+package ch.ethz.fcl.mogl.render;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
+import ch.ethz.fcl.mogl.model.ITriangleModel;
+import ch.ethz.fcl.mogl.scene.IRenderer;
 import ch.ethz.fcl.mpm.Scene;
 import ch.ethz.fcl.mpm.View;
 
@@ -54,8 +58,12 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 
 	@Override
 	public void renderModel(GL2 gl, View view) {
-		float ex = view.getScene().getModel().getExtentX() / 2;
-		float ey = view.getScene().getModel().getExtentY() / 2;
+		if (view.getScene().getModel() instanceof ITriangleModel)
+			throw new UnsupportedOperationException("can only render models that implement ITriangleModel");
+	
+		ITriangleModel model = (ITriangleModel)view.getScene().getModel();
+		Vector3D min = model.getExtentMin();
+		Vector3D max = model.getExtentMax();
 		
 		// enable depth test
 		gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -63,21 +71,21 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		// render ground plane
 		gl.glColor4fv(Scene.GRID_COLOR, 0);
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex3f(-ex, -ey, -0.001f);
-		gl.glVertex3f(ex, -ey, -0.001f);
-		gl.glVertex3f(ex, ey, -0.001f);
-		gl.glVertex3f(-ex, ey, -0.001f);
+		gl.glVertex3d(min.getX(), min.getY(), -0.001);
+		gl.glVertex3d(max.getX(), min.getY(), -0.001);
+		gl.glVertex3d(max.getX(), max.getY(), -0.001);
+		gl.glVertex3d(min.getX(), max.getY(), -0.001);
 		gl.glEnd();
 
 		// render geometry
-		renderGeometry(gl, view);
+		renderGeometry(gl, model);
 		
 		//debug
 		//gl.glColor4d(1.0, 1.0, 0.0, 0.5);
 		//renderShadowVolumes(gl, view, true);
 
 		// render shadow volumes
-		if (enableShadows) renderShadows(gl, view, SHADOW_COLOR);
+		if (enableShadows) renderShadows(gl, model, view.getScene().getLightPosition(), SHADOW_COLOR);
 		
 		// cleanup
 		gl.glDisable(GL2.GL_DEPTH_TEST);
@@ -91,12 +99,12 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		this.enableShadows = enableShadows;
 	}
 
-	private void renderGeometry(GL2 gl, View view) {
+	private void renderGeometry(GL2 gl, ITriangleModel model) {
 		gl.glColor3fv(Scene.MODEL_COLOR, 0);
-		drawTriangles(gl, view.getScene().getModel().getModelFaces(), view.getScene().getModel().getModelNormals(), view.getScene().getModel().getModelColors());
+		drawTriangles(gl, model.getFaces(), model.getNormals(), model.getColors());
 	}
 
-	private void renderShadows(GL2 gl, View view, float[] shadowColor) {
+	private void renderShadows(GL2 gl, ITriangleModel model, float[] lightPosition, float[] shadowColor) {
 		gl.glColorMask(false, false, false, false);
 		gl.glDepthMask(false);
 		gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
@@ -114,7 +122,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 			gl.glStencilFunc(GL.GL_ALWAYS, 0, 0xff);
 			gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR_WRAP, GL.GL_KEEP);
 
-			renderShadowVolumes(gl, view, true);
+			renderShadowVolumes(gl, model, lightPosition, true);
 		} else {
 			// z-pass
 			gl.glActiveStencilFaceEXT(GL.GL_BACK);
@@ -125,7 +133,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 			gl.glStencilFunc(GL.GL_ALWAYS, 0, 0xff);
 			gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_DECR_WRAP);
 
-			renderShadowVolumes(gl, view, false);
+			renderShadowVolumes(gl, model, lightPosition, false);
 		}
 		gl.glDisable(GL2.GL_STENCIL_TEST_TWO_SIDE_EXT);				
 		gl.glDisable(GL.GL_STENCIL_TEST);
@@ -137,7 +145,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		gl.glEnable(GL.GL_STENCIL_TEST);
 		gl.glStencilFunc(GL.GL_NOTEQUAL, 0x0, 0xff);
 		gl.glStencilOp(GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
-		renderShadowOverlay(gl, view, shadowColor);
+		renderShadowOverlay(gl, shadowColor);
 		gl.glDisable(GL.GL_STENCIL_TEST);
 	}
 
@@ -145,10 +153,9 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 	private final float[] _f = new float[9]; // current face (triangle)
 	private final float[] _e = new float[9]; // current extruded face
 
-	private void renderShadowVolumes(GL2 gl, View view, boolean drawCaps) {
-		float[] vertices = view.getScene().getModel().getModelFaces();
-		float[] normals = view.getScene().getModel().getModelNormals();
-		float[] lightPosition = view.getScene().getLightPosition();
+	private void renderShadowVolumes(GL2 gl, ITriangleModel model, float[] lightPosition, boolean drawCaps) {
+		float[] vertices = model.getFaces();
+		float[] normals = model.getNormals();
 		
 		for (int i = 0; i < vertices.length; i+=9) {
 			if (isFacingLight(vertices, normals, i, lightPosition)) {
@@ -216,7 +223,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 	}
 	
 	
-	private void renderShadowOverlay(GL2 gl, View view, float[] shadowColor) {
+	private void renderShadowOverlay(GL2 gl, float[] shadowColor) {
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glMatrixMode(GL2.GL_PROJECTION);

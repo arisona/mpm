@@ -25,11 +25,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package ch.ethz.fcl.mpm.calibration;
+package ch.ethz.fcl.mogl.mapping;
 
 import java.util.ArrayList;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
@@ -37,7 +38,7 @@ import org.apache.commons.math3.linear.SingularValueDecomposition;
 
 import ch.ethz.fcl.util.MathUtils;
 
-public final class BimberRaskarCalibrator extends AbstractCalibrator {
+public final class BimberRaskarCalibrator implements ICalibrator {
 
 	private RealMatrix projectionMatrix;
 	private RealMatrix modelviewMatrix;
@@ -202,5 +203,37 @@ public final class BimberRaskarCalibrator extends AbstractCalibrator {
 	@Override
 	public double[] getModelviewMatrix() {
 		return toDoubleArray(modelviewMatrix);
+	}
+	
+	private double getError(RealMatrix projectionMatrix, RealMatrix modelviewMatrix, ArrayList<Vector3D> modelVertices, ArrayList<Vector3D> projectedVertices) {
+		if (modelVertices.size() != projectedVertices.size())
+			throw new IllegalArgumentException("lists of vectors do not have same size");
+
+		RealMatrix pm = projectionMatrix.multiply(modelviewMatrix);
+		ArrayList<Vector3D> projectedPoints = new ArrayList<Vector3D>(modelVertices.size());
+		RealVector rp = new ArrayRealVector(4);
+		for (Vector3D p : modelVertices) {
+			rp.setEntry(0, p.getX());
+			rp.setEntry(1, p.getY());
+			rp.setEntry(2, p.getZ());
+			rp.setEntry(3, 1.0);
+			RealVector pp = pm.operate(rp);
+			pp = pp.mapDivide(pp.getEntry(3));
+			projectedPoints.add(new Vector3D(pp.getEntry(0), pp.getEntry(1), 0.0));
+		}
+		
+		double error = 0.0;
+		for (int i = 0; i < projectedPoints.size(); ++i) {
+			error += projectedPoints.get(i).distance(projectedVertices.get(i));
+		}
+		return error;
+	}
+	
+	private double[] toDoubleArray(RealMatrix m) {
+		double[] a = new double[16];
+		for (int i = 0; i < 16; ++i) {
+			a[i] = m.getEntry(i % 4, i / 4);
+		}
+		return a;
 	}
 }

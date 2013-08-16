@@ -25,50 +25,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package ch.ethz.fcl.mpm;
+package ch.ethz.fcl.mogl.mapping;
 
-import java.util.prefs.Preferences;
 
-public class PreferencesStore {
-	private static Preferences preferences;
-
-	public static Preferences get() {
-		if (preferences == null)
-			preferences = Preferences.userRoot().node(PreferencesStore.class.getName());
-		return preferences;
-	}
-
-	/**
-	 * Stores a 4x4 matrix to the preferences store with given key.
-	 * 
-	 * @param key
-	 *            key for the matrix to store
-	 * @param matrix
-	 *            matrix (4x4) to be stored
-	 */
-	public void putMatrix4x4(String key, double[] matrix) {
-		assert (matrix.length == 16);
-		get().putBoolean(key + "_matrix", true);
-		for (int i = 0; i < matrix.length; ++i)
-			get().putDouble(key + "_" + i, matrix[i]);
-	}
-
-	/**
-	 * Reads a 4x4 matrix from preferences store with given key.
-	 * 
-	 * @param key
-	 *            key for the matrix to read
-	 * @return the stored matrix or null if no matrix exists in store for given
-	 *         key.
-	 */
-	public double[] getMatrix4x4(String key) {
-		if (!get().getBoolean(key + "_matrix", false))
-			return null;
-
-		double[] matrix = new double[16];
-		for (int i = 0; i < matrix.length; ++i) {
-			matrix[i] = get().getDouble(key + "_" + i, 0.0);
-		}
-		return matrix;
-	}
+public interface ICalibrationModel {
+	public float[] getCalibrationVertices();
+	public float[] getCalibrationLines();
 }

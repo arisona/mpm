@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-interface ITool<T extends IView> {
+public interface ITool<T extends IView> {
 	// key listener
 
 	void keyPressed(KeyEvent e, T view);

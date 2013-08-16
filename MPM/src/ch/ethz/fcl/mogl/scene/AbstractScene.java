@@ -41,8 +41,12 @@ import java.util.List;
  * 
  */
 public abstract class AbstractScene<T extends IView> implements IScene<T> {
-	private ArrayList<T> views = new ArrayList<T>();
+	private final ArrayList<T> views = new ArrayList<T>();
+	private final NavigationTool navigationTool = new NavigationTool();
+	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
+	private ITool currentTool;
+	
 	@Override
 	public void addView(T view) {
 		views.add(view);
@@ -51,6 +55,10 @@ public abstract class AbstractScene<T extends IView> implements IScene<T> {
 	@Override
 	public List<T> getViews() {
 		return views;
+	}
+	
+	public NavigationGrid getNavigationGrid() {
+		return navigationGrid;
 	}
 
 	@Override

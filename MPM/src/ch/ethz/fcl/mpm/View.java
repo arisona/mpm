@@ -36,11 +36,11 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
 import ch.ethz.fcl.mogl.gl.VBO;
+import ch.ethz.fcl.mogl.mapping.CalibrationContext;
+import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.scene.AbstractView;
 import ch.ethz.fcl.mogl.scene.Camera;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
-import ch.ethz.fcl.mpm.calibration.CalibrationContext;
-import ch.ethz.fcl.mpm.model.ICalibrationModel;
 
 public class View extends AbstractView {
 	public enum ViewType {
@@ -169,13 +169,13 @@ public class View extends AbstractView {
 		// draw static elements
 		if (viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE) {
 			gl.glColor4fv(Scene.AXIS_COLOR, 0);
-			drawLines(gl, getModel().getAxisLines());
+			drawLines(gl, getScene().getNavigationGrid().getAxisLines());
 
-			drawText3D(drawable, "X", getModel().getAxisLines()[3], getModel().getAxisLines()[4], getModel().getAxisLines()[5]);
-			drawText3D(drawable, "Y", getModel().getAxisLines()[9], getModel().getAxisLines()[10], getModel().getAxisLines()[11]);
+			drawText3D(drawable, "X", getScene().getNavigationGrid().getAxisLines()[3], getScene().getNavigationGrid().getAxisLines()[4], getScene().getNavigationGrid().getAxisLines()[5]);
+			drawText3D(drawable, "Y", getScene().getNavigationGrid().getAxisLines()[9], getScene().getNavigationGrid().getAxisLines()[10], getScene().getNavigationGrid().getAxisLines()[11]);
 
 			gl.glColor4fv(Scene.GRID_COLOR, 0);
-			drawLines(gl, getModel().getGridLines());
+			drawLines(gl, getScene().getNavigationGrid().getGridLines());
 		}
 
 		// draw model elements
@@ -266,17 +266,18 @@ public class View extends AbstractView {
 
 	// private stuff
 
-	private ICalibrationModel getModel() {
+	private ITriangleModel getModel() {
 		return getScene().getModel();
 	}
 
 	private void updateVBOs(GL2 gl) {
-		if (vboVertices == null && getModel().getCalibrationVertices() != null) {
-			vboVertices = new VBO(gl, getModel().getCalibrationVertices());
-		}
-		if (vboEdges == null && getModel().getCalibrationLines() != null) {
-			vboEdges = new VBO(gl, getModel().getCalibrationLines());
-		}
+		// XXX FIXME
+		//if (vboVertices == null && getModel().getCalibrationVertices() != null) {
+		//	vboVertices = new VBO(gl, getModel().getCalibrationVertices());
+		//}
+		//if (vboEdges == null && getModel().getCalibrationLines() != null) {
+		//	vboEdges = new VBO(gl, getModel().getCalibrationLines());
+		//}
 	}
 
 	// rendering helpers (for non-vbo use)

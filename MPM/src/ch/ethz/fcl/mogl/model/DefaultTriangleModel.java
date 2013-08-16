@@ -25,43 +25,45 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package ch.ethz.fcl.mpm.model;
+package ch.ethz.fcl.mogl.model;
 
-public class SampleCalibrationModel extends BoxCalibrationModel {
-	public SampleCalibrationModel() {
-		super(10, 0.1f, 0.5f, 0.5f, 0.5f, 0.8f, 0.8f);
-		reset();
-	}
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+public class DefaultTriangleModel implements ITriangleModel {
 	private float[] faces;
 	private float[] normals;
 	private float[] colors;
+	private Vector3D extentMin = new Vector3D(0, 0, 0);
+	private Vector3D extentMax = new Vector3D(0, 0, 0);
 
-	@Override
-	public void reset() {
-		float[] faces = new float[4 * UNIT_CUBE_FACES.length];
-		addCube(faces, 0, -0.3f, -0.3f, 0.1f, 0.1f, 0.1f);
-		addCube(faces, 1, 0.1f, -0.2f, 0.2f, 0.1f, 0.2f);
-		addCube(faces, 2, 0f, 0f, 0.1f, 0.2f, 0.1f);
-		addCube(faces, 3, 0.2f, 0.1f, 0.1f, 0.1f, 0.2f);
-		setTriangles(faces, null);
+	public DefaultTriangleModel() {
 	}
 
 	@Override
-	public float[] getModelFaces() {
+	public Vector3D getExtentMin() {
+		return extentMin;
+	}
+
+	@Override
+	public Vector3D getExtentMax() {
+		return extentMax;
+	}
+
+	@Override
+	public float[] getFaces() {
 		return faces;
 	}
 
 	@Override
-	public float[] getModelNormals() {
+	public float[] getNormals() {
 		if (normals == null) {
-			normals = calculateNormals(getModelFaces());
+			normals = ModelUtils.calculateNormals(getFaces());
 		}
 		return normals;
 	}
 
 	@Override
-	public float[] getModelColors() {
+	public float[] getColors() {
 		return colors;
 	}
 
@@ -70,5 +72,18 @@ public class SampleCalibrationModel extends BoxCalibrationModel {
 		this.faces = faces;
 		this.colors = colors;
 		this.normals = null;
+
+		float[] extent = new float[] { Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY,
+				Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY };
+		for (int i = 0; i < faces.length; i += 3) {
+			extent[0] = Math.max(extent[0], faces[i]);
+			extent[1] = Math.min(extent[1], faces[i]);
+			extent[2] = Math.max(extent[2], faces[i+1]);
+			extent[3] = Math.min(extent[3], faces[i+1]);
+			extent[4] = Math.max(extent[4], faces[i+2]);
+			extent[5] = Math.min(extent[5], faces[i+2]);
+		}
+		extentMin = new Vector3D(extent[0], extent[2], extent[4]);
+		extentMax = new Vector3D(extent[1], extent[3], extent[5]);
 	}
 }

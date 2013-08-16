@@ -1,4 +1,6 @@
-package ch.ethz.fcl.mogl.scene;
+package ch.ethz.fcl.mogl.model;
+
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
  * Interface for all models to be rendered / interacted with. At this point, the
@@ -9,4 +11,7 @@ package ch.ethz.fcl.mogl.scene;
  * 
  */
 public interface IModel {
+	Vector3D getExtentMin();
+
+	Vector3D getExtentMax();
 }

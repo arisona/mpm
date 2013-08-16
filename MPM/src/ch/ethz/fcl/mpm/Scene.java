@@ -29,12 +29,11 @@ package ch.ethz.fcl.mpm;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 
+import ch.ethz.fcl.mogl.model.ITriangleModel;
+import ch.ethz.fcl.mogl.render.ShadowVolumeRenderer;
 import ch.ethz.fcl.mogl.scene.AbstractScene;
-import ch.ethz.fcl.mogl.scene.ShadowVolumeRenderer;
 import ch.ethz.fcl.mpm.View.ViewType;
-import ch.ethz.fcl.mpm.model.ICalibrationModel;
 
 public class Scene extends AbstractScene<View> {
 	// @formatter:off
@@ -85,7 +84,7 @@ public class Scene extends AbstractScene<View> {
 		}
 	}
 
-	private ICalibrationModel model;
+	private ITriangleModel model;
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
 	private ControlMode mode = ControlMode.NAVIGATE;
@@ -95,11 +94,11 @@ public class Scene extends AbstractScene<View> {
 		setLightPosition(lightPosition);
 	}
 
-	public ICalibrationModel getModel() {
+	public ITriangleModel getModel() {
 		return model;
 	}
 
-	public void setModel(ICalibrationModel model) {
+	public void setModel(ITriangleModel model) {
 		this.model = model;
 	}
 
@@ -156,7 +155,8 @@ public class Scene extends AbstractScene<View> {
 			renderer.setEnableShadows(!renderer.getEnableShadows());
 			break;
 		case KeyEvent.VK_R:
-			model.reset();
+			// XXX FIXME
+			//model.reset();
 			break;
 		default:
 			super.keyPressed(e, view);
@@ -171,23 +171,6 @@ public class Scene extends AbstractScene<View> {
 			repaintAll();
 		}
 	}
-
-	@Override
-	public void mouseDragged(MouseEvent e, View view) {
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e, View view) {
-	}
-
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e, View view) {
-		// XXX fix this
-		//if (view.getCalibrationContext().calibrated)
-		//	return;
-	}
-
-
 
 	public float[] getLightPosition() {
 		return lightPosition.clone();

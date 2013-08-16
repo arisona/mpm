@@ -39,7 +39,7 @@ import java.util.List;
  * @author radar
  * 
  */
-interface IScene<T extends IView> {
+public interface IScene<T extends IView> {
 
 	/**
 	 * Add a view to the scene.
