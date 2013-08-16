@@ -40,12 +40,12 @@ import java.util.List;
  * @author radar
  * 
  */
-public abstract class AbstractScene<T extends IView> implements IScene<T> {
+public abstract class AbstractScene<T extends AbstractView> implements IScene<T> {
 	private final ArrayList<T> views = new ArrayList<T>();
 	private final NavigationTool navigationTool = new NavigationTool();
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
-	private ITool currentTool;
+	private ITool<AbstractView> currentTool = new NullTool();
 	
 	@Override
 	public void addView(T view) {
@@ -57,10 +57,14 @@ public abstract class AbstractScene<T extends IView> implements IScene<T> {
 		return views;
 	}
 	
+	public NavigationTool getNavigationTool() {
+		return navigationTool;
+	}
+
 	public NavigationGrid getNavigationGrid() {
 		return navigationGrid;
 	}
-
+	
 	@Override
 	public void repaintAll() {
 		for (T view : views)
@@ -71,19 +75,21 @@ public abstract class AbstractScene<T extends IView> implements IScene<T> {
 
 	@Override
 	public void keyPressed(KeyEvent e, T view) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_ESCAPE:
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			System.exit(0);
-			break;
-		}
+		currentTool.keyPressed(e, view);
+		if (!e.isConsumed())
+			navigationTool.keyPressed(e, view);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e, T view) {
+		currentTool.keyReleased(e, view);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e, T view) {
+		currentTool.keyPressed(e, view);
 	}
 
 	// mouse listener

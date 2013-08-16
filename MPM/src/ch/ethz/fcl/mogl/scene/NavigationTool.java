@@ -17,6 +17,12 @@ public class NavigationTool extends AbstractTool<AbstractView> {
 	}
 	
 	@Override
+	public void mouseMoved(MouseEvent e, AbstractView view) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+	}
+	
+	@Override
 	public void mouseDragged(MouseEvent e, AbstractView view) {
 		if (button == MouseEvent.BUTTON1) {
 			view.getCamera().addToRotateZ(CAMERA_ROTATE_SCALE * (e.getX() - mouseX));
