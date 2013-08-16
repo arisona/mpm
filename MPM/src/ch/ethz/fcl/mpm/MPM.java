@@ -58,11 +58,11 @@ public final class MPM {
 		scene = new Scene();
 		scene.setModel(model);
 
-		scene.addView(new View(scene, 0, 10, 512, 512, "View 0", 0, 0.0, View.ViewType.CONTROL_VIEW));
-		scene.addView(new View(scene, 530, 0, 400, 400, "View 1", 1, 0.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 940, 0, 400, 400, "View 2", 2, 90.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 530, 410, 400, 400, "View 3", 3, 180.0, View.ViewType.PROJECTION_VIEW));
-		scene.addView(new View(scene, 940, 410, 400, 400, "View 4", 4, 270.0, View.ViewType.PROJECTION_VIEW));
+		scene.addView(new View(scene, 0, 10, 512, 512, "0", "View 0", 0.0, View.ViewType.CONTROL_VIEW));
+		scene.addView(new View(scene, 530, 0, 400, 400, "1", "View 1", 0.0, View.ViewType.PROJECTION_VIEW));
+		scene.addView(new View(scene, 940, 0, 400, 400, "2", "View 2", 90.0, View.ViewType.PROJECTION_VIEW));
+		scene.addView(new View(scene, 530, 410, 400, 400, "3", "View 3", 180.0, View.ViewType.PROJECTION_VIEW));
+		scene.addView(new View(scene, 940, 410, 400, 400, "4", "View 4", 270.0, View.ViewType.PROJECTION_VIEW));
 
 		// XXX geometry server disabled
 		// new GeometryServer(scene);

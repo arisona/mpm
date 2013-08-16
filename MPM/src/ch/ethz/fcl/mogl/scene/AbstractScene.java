@@ -40,20 +40,20 @@ import java.util.List;
  * @author radar
  * 
  */
-public abstract class AbstractScene<T extends AbstractView> implements IScene<T> {
-	private final ArrayList<T> views = new ArrayList<T>();
+public abstract class AbstractScene implements IScene {
+	private final ArrayList<IView> views = new ArrayList<IView>();
 	private final NavigationTool navigationTool = new NavigationTool();
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
-	private ITool<AbstractView> currentTool = new NullTool();
+	private ITool currentTool = new NullTool();
 	
 	@Override
-	public void addView(T view) {
+	public void addView(IView view) {
 		views.add(view);
 	}
 
 	@Override
-	public List<T> getViews() {
+	public List<IView> getViews() {
 		return views;
 	}
 	
@@ -67,14 +67,14 @@ public abstract class AbstractScene<T extends AbstractView> implements IScene<T>
 	
 	@Override
 	public void repaintAll() {
-		for (T view : views)
+		for (IView view : views)
 			view.repaint();
 	}
 
 	// key listener
 
 	@Override
-	public void keyPressed(KeyEvent e, T view) {
+	public void keyPressed(KeyEvent e, IView view) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			System.exit(0);
 		currentTool.keyPressed(e, view);
@@ -83,50 +83,50 @@ public abstract class AbstractScene<T extends AbstractView> implements IScene<T>
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e, T view) {
+	public void keyReleased(KeyEvent e, IView view) {
 		currentTool.keyReleased(e, view);
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e, T view) {
+	public void keyTyped(KeyEvent e, IView view) {
 		currentTool.keyPressed(e, view);
 	}
 
 	// mouse listener
 
 	@Override
-	public void mouseEntered(MouseEvent e, T view) {
+	public void mouseEntered(MouseEvent e, IView view) {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e, T view) {
+	public void mouseExited(MouseEvent e, IView view) {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e, T view) {
+	public void mousePressed(MouseEvent e, IView view) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e, T view) {
+	public void mouseReleased(MouseEvent e, IView view) {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e, T view) {
+	public void mouseClicked(MouseEvent e, IView view) {
 	}
 
 	// mouse motion listener
 
 	@Override
-	public void mouseMoved(MouseEvent e, T view) {
+	public void mouseMoved(MouseEvent e, IView view) {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e, T view) {
+	public void mouseDragged(MouseEvent e, IView view) {
 	}
 
 	// mouse wheel listener
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e, T view) {
+	public void mouseWheelMoved(MouseWheelEvent e, IView view) {
 	}
 }

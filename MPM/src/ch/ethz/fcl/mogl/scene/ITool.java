@@ -4,32 +4,32 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-public interface ITool<T extends IView> {
+public interface ITool {
 	// key listener
 
-	void keyPressed(KeyEvent e, T view);
+	void keyPressed(KeyEvent e, IView view);
 
-	void keyReleased(KeyEvent e, T view);
+	void keyReleased(KeyEvent e, IView view);
 
-	void keyTyped(KeyEvent e, T view);
+	void keyTyped(KeyEvent e, IView view);
 
 	// mouse listener
 
-	void mouseEntered(MouseEvent e, T view);
+	void mouseEntered(MouseEvent e, IView view);
 
-	void mouseExited(MouseEvent e, T view);
+	void mouseExited(MouseEvent e, IView view);
 
-	void mousePressed(MouseEvent e, T view);
+	void mousePressed(MouseEvent e, IView view);
 
-	void mouseReleased(MouseEvent e, T view);
+	void mouseReleased(MouseEvent e, IView view);
 
-	void mouseClicked(MouseEvent e, T view);
+	void mouseClicked(MouseEvent e, IView view);
 
 	// mouse motion listener
 
-	void mouseMoved(MouseEvent e, T view);
+	void mouseMoved(MouseEvent e, IView view);
 
-	void mouseDragged(MouseEvent e, T view);
+	void mouseDragged(MouseEvent e, IView view);
 
-	void mouseWheelMoved(MouseWheelEvent e, T view);
+	void mouseWheelMoved(MouseWheelEvent e, IView view);
 }

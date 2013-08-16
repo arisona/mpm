@@ -39,19 +39,19 @@ import java.util.List;
  * @author radar
  * 
  */
-public interface IScene<T extends IView> {
+public interface IScene {
 
 	/**
 	 * Add a view to the scene.
 	 * @param view the view to add
 	 */
-	void addView(T view);
+	void addView(IView view);
 
 	/**
 	 * Get a list of all views.
 	 * @return list of views
 	 */
-	List<T> getViews();
+	List<IView> getViews();
 
 	/**
 	 * Repaint all views.
@@ -60,29 +60,29 @@ public interface IScene<T extends IView> {
 
 	// key listener
 
-	void keyPressed(KeyEvent e, T view);
+	void keyPressed(KeyEvent e, IView view);
 
-	void keyReleased(KeyEvent e, T view);
+	void keyReleased(KeyEvent e, IView view);
 
-	void keyTyped(KeyEvent e, T view);
+	void keyTyped(KeyEvent e, IView view);
 
 	// mouse listener
 
-	void mouseEntered(MouseEvent e, T view);
+	void mouseEntered(MouseEvent e, IView view);
 
-	void mouseExited(MouseEvent e, T view);
+	void mouseExited(MouseEvent e, IView view);
 
-	void mousePressed(MouseEvent e, T view);
+	void mousePressed(MouseEvent e, IView view);
 
-	void mouseReleased(MouseEvent e, T view);
+	void mouseReleased(MouseEvent e, IView view);
 
-	void mouseClicked(MouseEvent e, T view);
+	void mouseClicked(MouseEvent e, IView view);
 
 	// mouse motion listener
 
-	void mouseMoved(MouseEvent e, T view);
+	void mouseMoved(MouseEvent e, IView view);
 
-	void mouseDragged(MouseEvent e, T view);
+	void mouseDragged(MouseEvent e, IView view);
 
-	void mouseWheelMoved(MouseWheelEvent e, T view);
+	void mouseWheelMoved(MouseWheelEvent e, IView view);
 }

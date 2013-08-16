@@ -1,4 +1,4 @@
 package ch.ethz.fcl.mogl.scene;
 
-public final class NullTool extends AbstractTool<AbstractView> {
+public final class NullTool extends AbstractTool {
 }

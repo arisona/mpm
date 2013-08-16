@@ -54,7 +54,8 @@ public abstract class AbstractView implements IView {
 	private static final Font FONT = new Font("SansSerif", Font.BOLD, 12);
 
 	private final Frame frame;
-	private final IScene<IView> scene;
+	private final IScene scene;
+	private final String id;
 
 	private Camera camera = new Camera();
 
@@ -65,10 +66,10 @@ public abstract class AbstractView implements IView {
 	private double[] projectionMatrix = new double[16];
 	private double[] modelviewMatrix = new double[16];
 
-	@SuppressWarnings("unchecked")
-	protected AbstractView(IScene<? extends IView> scene, int x, int y, int w, int h, String title) {
+	protected AbstractView(IScene scene, int x, int y, int w, int h, String id, String title) {
 		this.frame = new Frame(w, h, title);
-		this.scene = (IScene<IView>) scene;
+		this.scene = scene;
+		this.id = id;
 		frame.setView(this);
 		Point p = frame.getJFrame().getLocation();
 		if (x != -1)
@@ -78,42 +79,61 @@ public abstract class AbstractView implements IView {
 		frame.getJFrame().setLocation(p);
 	}
 
-	public IScene<?> getScene() {
-		return scene;
-	}
-	
-	public Camera getCamera() {
-		return camera;
-	}
-
 	protected final Frame getFrame() {
 		return frame;
 	}
 
-	protected final GLU getGLU() {
+	@Override
+	public IScene getScene() {
+		return scene;
+	}
+	
+	@Override
+	public Camera getCamera() {
+		return camera;
+	}
+
+	@Override
+	public final GLU getGLU() {
 		return glu;
 	}
 
+	@Override
 	public final int getWidth() {
 		return viewport[2];
 	}
 
+	@Override
 	public final int getHeight() {
 		return viewport[3];
 	}
+	
+	@Override
+	public String getId() {
+		return id;
+	}
 
+	@Override
+	public int[] getViewport() {
+		return viewport;
+	}
+	
+	@Override
 	public final double[] getProjectionMatrix() {
 		return projectionMatrix;
 	}
 
+	@Override
 	public void setProjectionMatrix(double[] projectionMatrix) {
 		this.projectionMatrix = projectionMatrix;
 	}
 
+	@Override
 	public final double[] getModelviewMatrix() {
 		return modelviewMatrix;
 	}
 
+	@Override
 	public void setModelviewMatrix(double[] modelviewMatrix) {
 		this.modelviewMatrix = modelviewMatrix;
 	}
@@ -261,36 +281,4 @@ public abstract class AbstractView implements IView {
 	protected void setTextColor(float r, float g, float b, float a) {
 		textRenderer.setColor(r, g, b, a);
 	}
-
-	// other helpers
-
-	public boolean projectToDeviceCoordinates(double x, double y, double z, double[] v) {
-		if (!glu.gluProject(x, y, z, modelviewMatrix, 0, projectionMatrix, 0, viewport, 0, v, 0))
-			return false;
-		v[0] = screenToDeviceX((int) v[0]);
-		v[1] = screenToDeviceY((int) v[1]);
-		v[2] = 0;
-		return true;
-	}
-
-	public boolean projectToScreenCoordinates(double x, double y, double z, double[] v) {
-		return glu.gluProject(x, y, z, modelviewMatrix, 0, projectionMatrix, 0, viewport, 0, v, 0);
-	}
-
-	public final int deviceToScreenX(double x) {
-		return (int) ((1.0 + x) / 2.0 * getWidth());
-	}
-
-	public final int deviceToScreenY(double y) {
-		return (int) ((1.0 + y) / 2.0 * getHeight());
-	}
-
-	public final double screenToDeviceX(int x) {
-		return 2.0 * x / getWidth() - 1.0;
-	}
-
-	public final double screenToDeviceY(int y) {
-		return 2.0 * y / getHeight() - 1.0;
-	}
-
 }

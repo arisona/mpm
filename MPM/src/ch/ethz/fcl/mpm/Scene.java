@@ -33,9 +33,10 @@ import java.awt.event.MouseEvent;
 import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.render.ShadowVolumeRenderer;
 import ch.ethz.fcl.mogl.scene.AbstractScene;
+import ch.ethz.fcl.mogl.scene.IView;
 import ch.ethz.fcl.mpm.View.ViewType;
 
-public class Scene extends AbstractScene<View> {
+public class Scene extends AbstractScene {
 	// @formatter:off
 	public static final String[] HELP = {
 		"[1] Rendering/Navigation Mode",
@@ -88,7 +89,7 @@ public class Scene extends AbstractScene<View> {
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
 	private ControlMode mode = ControlMode.NAVIGATE;
-	private View selectedView = null;
+	private IView selectedView = null;
 
 	public Scene() {
 		setLightPosition(lightPosition);
@@ -116,9 +117,9 @@ public class Scene extends AbstractScene<View> {
 
 	public String getControlModeText() {
 		if (mode == ControlMode.CALIBRATE) {
-			return mode.getText() + " (View " + selectedView.getViewIndex() + ")";
+			return mode.getText() + " (View " + selectedView.getId() + ")";
 		} else if (mode == ControlMode.FILL) {
-			return mode.getText() + " (Fill " + selectedView.getViewIndex() + ")";
+			return mode.getText() + " (Fill " + selectedView.getId() + ")";
 		}
 		return mode.getText();
 	}
@@ -138,7 +139,7 @@ public class Scene extends AbstractScene<View> {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e, View view) {
+	public void keyPressed(KeyEvent e, IView view) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_1:
 			mode = ControlMode.NAVIGATE;
@@ -165,7 +166,7 @@ public class Scene extends AbstractScene<View> {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e, View view) {
+	public void mousePressed(MouseEvent e, IView view) {
 		if (selectedView != view) {
 			selectedView = view;
 			repaintAll();

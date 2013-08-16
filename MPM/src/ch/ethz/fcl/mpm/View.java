@@ -34,7 +34,7 @@ import javax.media.opengl.glu.GLU;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
+import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.mapping.CalibrationContext;
 import ch.ethz.fcl.mogl.model.ITriangleModel;
@@ -51,7 +51,6 @@ public class View extends AbstractView {
 	// public static final double FAR = 1000.0;
 	public static final double FAR = Double.POSITIVE_INFINITY;
 
-	private final int viewIndex;
 	private final ViewType viewType;
 
 	private CalibrationContext calibrationContext = new CalibrationContext();
@@ -81,15 +80,10 @@ public class View extends AbstractView {
 	 * @param viewType
 	 *            type of view (CONTROL_VIEW, PROJECTION_VIEW)
 	 */
-	public View(Scene scene, int x, int y, int w, int h, String title, int viewIndex, double initialCamRotateZ, ViewType viewType) {
-		super(scene, x, y, w, h, viewType == ViewType.PROJECTION_VIEW ? null : title);
-		this.viewIndex = viewIndex;
+	public View(Scene scene, int x, int y, int w, int h, String id, String title, double initialCamRotateZ, ViewType viewType) {
+		super(scene, x, y, w, h, id, viewType == ViewType.PROJECTION_VIEW ? null : title);
 		this.viewType = viewType;
 		getCamera().setRotateZ(initialCamRotateZ);
-	}
-
-	public int getViewIndex() {
-		return viewIndex;
 	}
 
 	public ViewType getViewType() {
@@ -146,7 +140,7 @@ public class View extends AbstractView {
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		if (!isCalibrated()) {
 			gl.glLoadIdentity();
-			gl.glLoadMatrixd(ProjectionUtilities.getPerspectiveMatrix(45.0, (double) getWidth() / getHeight(), NEAR, FAR), 0);
+			gl.glLoadMatrixd(ProjectionUtils.getPerspectiveMatrix(45.0, (double) getWidth() / getHeight(), NEAR, FAR), 0);
 		} else {
 			gl.glLoadMatrixd(getProjectionMatrix(), 0);
 		}
@@ -234,7 +228,7 @@ public class View extends AbstractView {
 			gl.glBegin(GL2.GL_LINES);
 			for (int i = 0; i < calibrationContext.projectedVertices.size(); ++i) {
 				Vector3D a = calibrationContext.modelVertices.get(i);
-				if (!projectToDeviceCoordinates(a.getX(), a.getY(), a.getZ(), v))
+				if (!ProjectionUtils.projectToDeviceCoordinates(this, a.getX(), a.getY(), a.getZ(), v))
 					continue;
 				gl.glVertex3dv(v, 0);
 				a = calibrationContext.projectedVertices.get(i);

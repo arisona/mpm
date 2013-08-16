@@ -44,6 +44,22 @@ import javax.media.opengl.glu.GLU;
  * 
  */
 public interface IView extends KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+	IScene getScene();
+	Camera getCamera();
+	int getWidth();
+	int getHeight();
+	String getId();
+	
+	int[] getViewport();
+	
+	double[] getProjectionMatrix();
+	void setProjectionMatrix(double[] projectionMatrix);
+
+	double[] getModelviewMatrix();
+	void setModelviewMatrix(double[] modelviewMatrix);
+	
+	GLU getGLU();
+	
 	/**
 	 * Called immediately after the OpenGL context is initialized. Can be used
 	 * to perform one-time initialization. Run only once. Caution: If you used
