@@ -37,6 +37,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.scene.AbstractView;
+import ch.ethz.fcl.mogl.scene.Camera;
 import ch.ethz.fcl.mpm.Scene.ControlMode;
 import ch.ethz.fcl.mpm.calibration.CalibrationContext;
 import ch.ethz.fcl.mpm.model.ICalibrationModel;
@@ -54,12 +55,6 @@ public class View extends AbstractView {
 	private final ViewType viewType;
 
 	private CalibrationContext calibrationContext = new CalibrationContext();
-
-	private double camDistance = 2.0;
-	private double camRotateZ = 0.0;
-	private double camRotateX = 45.0;
-	private double camTranslateX = 0.0;
-	private double camTranslateY = 0.0;
 
 	private VBO vboVertices;
 	private VBO vboEdges;
@@ -90,7 +85,7 @@ public class View extends AbstractView {
 		super(scene, x, y, w, h, viewType == ViewType.PROJECTION_VIEW ? null : title);
 		this.viewIndex = viewIndex;
 		this.viewType = viewType;
-		camRotateZ = initialCamRotateZ;
+		getCamera().setRotateZ(initialCamRotateZ);
 	}
 
 	public int getViewIndex() {
@@ -159,10 +154,11 @@ public class View extends AbstractView {
 		// view setup
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		if (!isCalibrated()) {
+			Camera c = getCamera();
 			gl.glLoadIdentity();
-			gl.glTranslated(camTranslateX, camTranslateY, -camDistance);
-			gl.glRotated(camRotateX - 90.0, 1.0, 0.0, 0.0);
-			gl.glRotated(camRotateZ, 0.0, 0.0, 1.0);
+			gl.glTranslated(c.getTranslateX(), c.getTranslateY(), -c.getDistance());
+			gl.glRotated(c.getRotateX() - 90.0, 1.0, 0.0, 0.0);
+			gl.glRotated(c.getRotateZ(), 0.0, 0.0, 1.0);
 		} else {
 			gl.glLoadMatrixd(getModelviewMatrix(), 0);
 		}
@@ -266,30 +262,6 @@ public class View extends AbstractView {
 	@Override
 	public void dispose(GLAutoDrawable drawable, GL2 gl, GLU glu) {
 		super.dispose(drawable, gl, glu);
-	}
-
-	// camera handling
-
-	public void addToCameraDistance(double delta) {
-		camDistance += delta;
-		camDistance = Math.max(1.0f, camDistance);
-		camDistance = Math.min(80.0f, camDistance);
-	}
-
-	public void addToRotateZ(double delta) {
-		camRotateZ += delta;
-	}
-
-	public void addToRotateX(double delta) {
-		camRotateX += delta;
-	}
-
-	public void addToTranslateX(double delta) {
-		camTranslateX += delta;
-	}
-
-	public void addToTranslateY(double delta) {
-		camTranslateY += delta;
 	}
 
 	// private stuff

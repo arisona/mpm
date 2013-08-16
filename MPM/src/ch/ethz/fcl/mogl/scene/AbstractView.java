@@ -54,6 +54,7 @@ public abstract class AbstractView implements IView {
 	private static final Font FONT = new Font("SansSerif", Font.BOLD, 12);
 
 	private final IScene<IView> scene;
+	private Camera camera = new Camera();
 	private final Frame frame;
 
 	private GLU glu;
@@ -76,8 +77,12 @@ public abstract class AbstractView implements IView {
 		frame.getJFrame().setLocation(p);
 	}
 
-	protected IScene<?> getScene() {
+	public IScene<?> getScene() {
 		return scene;
+	}
+	
+	public Camera getCamera() {
+		return camera;
 	}
 
 	protected final Frame getFrame() {
