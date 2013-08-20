@@ -60,7 +60,7 @@ public class ShadowVolumeRenderer implements IRenderer {
 
 	@Override
 	public void renderModel(GL2 gl, IView view) {
-		if (view.getScene().getModel() instanceof ITriangleModel)
+		if (!(view.getScene().getModel() instanceof ITriangleModel))
 			throw new UnsupportedOperationException("can only render models that implement ITriangleModel");
 	
 		ITriangleModel model = (ITriangleModel)view.getScene().getModel();

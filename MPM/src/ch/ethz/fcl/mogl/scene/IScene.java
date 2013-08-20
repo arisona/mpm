@@ -78,6 +78,7 @@ public interface IScene {
 	boolean isEnabled(IView view);
 	
 	public ITool getCurrentTool();
+	public void setCurrentTool(ITool tool);
 	public NavigationTool getNavigationTool();
 	public NavigationGrid getNavigationGrid();
 	

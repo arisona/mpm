@@ -49,7 +49,6 @@ public abstract class AbstractScene implements IScene {
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
 	private ITool currentTool = new NullTool();
-	private ITool activeTool;
 	
 	@Override
 	public IModel getModel() {
@@ -89,6 +88,15 @@ public abstract class AbstractScene implements IScene {
 	}
 	
 	@Override
+	public void setCurrentTool(ITool tool) {
+		if (tool != null)
+			currentTool = tool;
+		else
+			currentTool = new NullTool();
+		repaintAll();
+	}
+	
+	@Override
 	public NavigationTool getNavigationTool() {
 		return navigationTool;
 	}
@@ -105,8 +113,6 @@ public abstract class AbstractScene implements IScene {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			System.exit(0);
 		currentTool.keyPressed(e, view);
-		if (!e.isConsumed())
-			navigationTool.keyPressed(e, view);
 	}
 	
 	@Override
@@ -129,18 +135,18 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mousePressed(MouseEvent e, IView view) {
-		currentTool.mousePressed(e, view);
-		if (e.isConsumed()) {
-			activeTool = currentTool;
-		} else {
+		if (!modifierPressed(e))
+			currentTool.mousePressed(e, view);
+		else 
 			navigationTool.mousePressed(e, view);
-			activeTool = navigationTool;
-		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e, IView view) {
-		activeTool = null;
+		if (!modifierPressed(e))
+			currentTool.mouseReleased(e, view);
+		else 
+			navigationTool.mouseReleased(e, view);
 	}
 
 	@Override
@@ -152,20 +158,25 @@ public abstract class AbstractScene implements IScene {
 	@Override
 	public void mouseMoved(MouseEvent e, IView view) {
 		currentTool.mouseMoved(e, view);
+		navigationTool.mouseMoved(e, view);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e, IView view) {
-		assert activeTool == null;
-		activeTool.mouseDragged(e, view);
+		if (!modifierPressed(e))
+			currentTool.mouseDragged(e, view);
+		else
+			navigationTool.mouseDragged(e, view);
 	}
 
 	// mouse wheel listener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e, IView view) {
-		currentTool.mouseWheelMoved(e, view);
-		if (!e.isConsumed())
-			navigationTool.mouseWheelMoved(e, view);
+		navigationTool.mouseWheelMoved(e, view);
+	}
+	
+	private boolean modifierPressed(MouseEvent e) {
+		return e.isShiftDown() || e.isControlDown() || e.isAltDown() || e.isMetaDown();
 	}
 }

@@ -4,8 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 public class NavigationTool extends AbstractTool {
-	private static final double CAMERA_TRANSLATE_SCALE = 0.01;
 	private static final double CAMERA_ROTATE_SCALE = 1.0;
+	private static final double CAMERA_TRANSLATE_SCALE = 0.01;
 
 	private int button;
 	private int mouseX;
@@ -31,6 +31,7 @@ public class NavigationTool extends AbstractTool {
 			view.getCamera().addToTranslateX(CAMERA_TRANSLATE_SCALE * (e.getX() - mouseX));
 			view.getCamera().addToTranslateY(CAMERA_TRANSLATE_SCALE * (mouseY - e.getY()));
 		}
+		view.repaint();
 		mouseX = e.getX();
 		mouseY = e.getY();
 	}

@@ -36,6 +36,8 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
+import com.jogamp.opengl.util.awt.TextRenderer;
+
 /**
  * A 'view' here is a view with some control functionality, i.e. it handles the
  * rendering of the model and also the user input specific to the view.
@@ -44,21 +46,25 @@ import javax.media.opengl.glu.GLU;
  * 
  */
 public interface IView extends KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+	public enum ViewType {
+		INTERACTIVE_VIEW, MAPPED_VIEW
+	}
+
 	IScene getScene();
 	Camera getCamera();
 	int getWidth();
 	int getHeight();
+	ViewType getViewType();
 	String getId();
 	
 	int[] getViewport();
 	
 	double[] getProjectionMatrix();
-	void setProjectionMatrix(double[] projectionMatrix);
-
 	double[] getModelviewMatrix();
-	void setModelviewMatrix(double[] modelviewMatrix);
+	void setMatrices(double[] projectionMatrix, double[] modelviewMatrix);
 	
 	GLU getGLU();
+	TextRenderer getTextRenderer();
 	
 	/**
 	 * Called immediately after the OpenGL context is initialized. Can be used
