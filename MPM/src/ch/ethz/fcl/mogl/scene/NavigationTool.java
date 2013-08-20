@@ -10,7 +10,7 @@ public class NavigationTool extends AbstractTool {
 	private int button;
 	private int mouseX;
 	private int mouseY;
-	
+
 	@Override
 	public void mousePressed(MouseEvent e, IView view) {
 		button = e.getButton();

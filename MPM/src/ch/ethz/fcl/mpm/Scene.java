@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 
 import ch.ethz.fcl.mogl.render.ShadowVolumeRenderer;
 import ch.ethz.fcl.mogl.scene.AbstractScene;
+import ch.ethz.fcl.mogl.scene.IRenderer;
 import ch.ethz.fcl.mogl.scene.IView;
 import ch.ethz.fcl.mpm.View.ViewType;
 
@@ -55,34 +56,7 @@ public class Scene extends AbstractScene {
 	};
 	// @formatter:on
 
-	public static final float[] MODEL_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
-	public static final float[] AXIS_COLOR = { 1.0f, 1.0f, 1.0f, 0.75f };
-	public static final float[] GRID_COLOR = { 1.0f, 1.0f, 1.0f, 0.5f };
-	public static final float[] CALIBRATION_COLOR_UNCALIBRATED = { 1.0f, 1.0f, 0.0f, 1.0f };
-	public static final float[] CALIBRATION_COLOR_CALIBRATED = { 0.0f, 1.0f, 0.0f, 1.0f };
-
-	public static final double CROSSHAIR_SIZE = 20.0;
-
 	private float[] lightPosition = { 10.0f, 6.0f, 8.0f };
-
-	public enum ControlMode {
-		NAVIGATE("Mode: Navigation"), CALIBRATE("Mode: Calibration"), FILL("Mode: Fill");
-
-		ControlMode(String text) {
-			this.text = text;
-		}
-
-		private final String text;
-
-		public String getText() {
-			return text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
 
 	private final ShadowVolumeRenderer renderer = new ShadowVolumeRenderer();
 
@@ -93,7 +67,8 @@ public class Scene extends AbstractScene {
 		setLightPosition(lightPosition);
 	}
 
-	public ShadowVolumeRenderer getRenderer() {
+	@Override
+	public IRenderer getRenderer() {
 		return renderer;
 	}
 
@@ -163,6 +138,7 @@ public class Scene extends AbstractScene {
 		}
 	}
 
+	@Override
 	public float[] getLightPosition() {
 		return lightPosition.clone();
 	}

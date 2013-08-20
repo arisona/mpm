@@ -1,6 +1,9 @@
 package ch.ethz.fcl.mogl.scene;
 
 public class NavigationGrid {
+	public static final float[] AXIS_COLOR = { 1.0f, 1.0f, 1.0f, 0.75f };
+	public static final float[] GRID_COLOR = { 1.0f, 1.0f, 1.0f, 0.5f };
+
 	private int numGridLines;
 	private float gridSpacing;
 

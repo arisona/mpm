@@ -34,8 +34,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.scene.IRenderer;
-import ch.ethz.fcl.mpm.Scene;
-import ch.ethz.fcl.mpm.View;
+import ch.ethz.fcl.mogl.scene.IView;
+import ch.ethz.fcl.mogl.scene.NavigationGrid;
 
 /**
  * Very basic shadow volume renderer.
@@ -44,7 +44,7 @@ import ch.ethz.fcl.mpm.View;
  */
 // XXX lots to do (silhouettes, shader optimizations, etc...)
 
-public class ShadowVolumeRenderer implements IRenderer<View> {
+public class ShadowVolumeRenderer implements IRenderer {
 	private enum StencilShadowMethod {
 		ZPASS,
 		ZFAIL
@@ -52,12 +52,14 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 	
 	private static final StencilShadowMethod STENCIL_SHADOW_METHOD = StencilShadowMethod.ZFAIL;
 	
+	// XXX FIXME
+	private static final float[] MODEL_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private static final float[] SHADOW_COLOR = { 1, 0, 0, 1 };
 	
 	private boolean enableShadows = false;
 
 	@Override
-	public void renderModel(GL2 gl, View view) {
+	public void renderModel(GL2 gl, IView view) {
 		if (view.getScene().getModel() instanceof ITriangleModel)
 			throw new UnsupportedOperationException("can only render models that implement ITriangleModel");
 	
@@ -69,7 +71,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 
 		// render ground plane
-		gl.glColor4fv(Scene.GRID_COLOR, 0);
+		gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
 		gl.glBegin(GL2.GL_QUADS);
 		gl.glVertex3d(min.getX(), min.getY(), -0.001);
 		gl.glVertex3d(max.getX(), min.getY(), -0.001);
@@ -100,7 +102,7 @@ public class ShadowVolumeRenderer implements IRenderer<View> {
 	}
 
 	private void renderGeometry(GL2 gl, ITriangleModel model) {
-		gl.glColor3fv(Scene.MODEL_COLOR, 0);
+		gl.glColor3fv(MODEL_COLOR, 0);
 		drawTriangles(gl, model.getFaces(), model.getNormals(), model.getColors());
 	}
 

@@ -49,6 +49,7 @@ public abstract class AbstractScene implements IScene {
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
 	private ITool currentTool = new NullTool();
+	private ITool activeTool;
 	
 	@Override
 	public IModel getModel() {
@@ -70,20 +71,33 @@ public abstract class AbstractScene implements IScene {
 		return views;
 	}
 	
-	public NavigationTool getNavigationTool() {
-		return navigationTool;
-	}
-
-	public NavigationGrid getNavigationGrid() {
-		return navigationGrid;
-	}
-	
 	@Override
 	public void repaintAll() {
 		for (IView view : views)
 			view.repaint();
 	}
 
+	@Override
+	public boolean isEnabled(IView view) {
+		// XXX FIXME
+		return true;
+	}
+
+	@Override
+	public ITool getCurrentTool() {
+		return currentTool;
+	}
+	
+	@Override
+	public NavigationTool getNavigationTool() {
+		return navigationTool;
+	}
+
+	@Override
+	public NavigationGrid getNavigationGrid() {
+		return navigationGrid;
+	}
+	
 	// key listener
 
 	@Override
@@ -94,15 +108,13 @@ public abstract class AbstractScene implements IScene {
 		if (!e.isConsumed())
 			navigationTool.keyPressed(e, view);
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent e, IView view) {
-		currentTool.keyReleased(e, view);
 	}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e, IView view) {
-		currentTool.keyPressed(e, view);
 	}
 
 	// mouse listener
@@ -117,29 +129,43 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mousePressed(MouseEvent e, IView view) {
+		currentTool.mousePressed(e, view);
+		if (e.isConsumed()) {
+			activeTool = currentTool;
+		} else {
+			navigationTool.mousePressed(e, view);
+			activeTool = navigationTool;
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e, IView view) {
+		activeTool = null;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e, IView view) {
 	}
-
+	
 	// mouse motion listener
 
 	@Override
 	public void mouseMoved(MouseEvent e, IView view) {
+		currentTool.mouseMoved(e, view);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e, IView view) {
+		assert activeTool == null;
+		activeTool.mouseDragged(e, view);
 	}
 
 	// mouse wheel listener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e, IView view) {
+		currentTool.mouseWheelMoved(e, view);
+		if (!e.isConsumed())
+			navigationTool.mouseWheelMoved(e, view);
 	}
 }

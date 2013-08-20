@@ -71,6 +71,20 @@ public interface IScene {
 	 */
 	void repaintAll();
 
+	/** 
+	 * Determine whether a given view is enabled by the scene (i.e. whether it should paint or not)
+	 * @return
+	 */
+	boolean isEnabled(IView view);
+	
+	public ITool getCurrentTool();
+	public NavigationTool getNavigationTool();
+	public NavigationGrid getNavigationGrid();
+	
+	public IRenderer getRenderer();
+	
+	public float[] getLightPosition();
+	
 	// key listener
 
 	void keyPressed(KeyEvent e, IView view);
@@ -96,6 +110,8 @@ public interface IScene {
 	void mouseMoved(MouseEvent e, IView view);
 
 	void mouseDragged(MouseEvent e, IView view);
+
+	// mouse wheel listener
 
 	void mouseWheelMoved(MouseWheelEvent e, IView view);
 }

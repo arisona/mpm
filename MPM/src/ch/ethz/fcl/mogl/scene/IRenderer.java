@@ -36,6 +36,6 @@ import javax.media.opengl.GL2;
  * 
  */
 // XXX work in progress
-public interface IRenderer<T extends IView> {
-	void renderModel(GL2 gl, T view);
+public interface IRenderer {
+	void renderModel(GL2 gl, IView view);
 }

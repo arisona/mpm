@@ -4,6 +4,10 @@ public class Camera {
 	private static final double MIN_DISTANCE = 1.0;
 	private static final double MAX_DISTANCE = 80.0;
 	
+	private double near = 0.1;
+	// public double far = 1000.0;
+	private double far = Double.POSITIVE_INFINITY;
+
 	private double distance = 2.0;
 	private double rotateZ = 0.0;
 	private double rotateX = 45.0;
@@ -12,6 +16,14 @@ public class Camera {
 
 	public Camera() {
 		
+	}
+	
+	public double getNearClippingPlane() {
+		return near;
+	}
+	
+	public double getFarClippingPlane() {
+		return far;
 	}
 	
 	public double getDistance() {

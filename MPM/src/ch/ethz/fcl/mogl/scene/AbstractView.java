@@ -38,7 +38,9 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
+import ch.ethz.fcl.mogl.gl.DrawingUtils;
 import ch.ethz.fcl.mogl.gl.Frame;
+import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -63,8 +65,8 @@ public abstract class AbstractView implements IView {
 
 	private int[] viewport = new int[4];
 	private double[] projectionMatrix = new double[16];
-	private double[] modelviewMatrix = new double[16];
-
+	private double[] modelviewMatrix = new double[16];	
+	
 	protected AbstractView(IScene scene, int x, int y, int w, int h, String id, String title) {
 		this.frame = new Frame(w, h, title);
 		this.scene = scene;
@@ -163,8 +165,93 @@ public abstract class AbstractView implements IView {
 
 		gl.glEnable(GL2.GL_BLEND);
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		
+		gl.glEnable(GL2.GL_POINT_SMOOTH);
 	}
 
+	
+	@Override
+	public void display(GLAutoDrawable drawable, GL2 gl, GLU glu) {
+		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
+
+		if (!getScene().isEnabled(this))
+			return;
+
+		// ---- INFO DISPLAY
+		/*
+		if (viewType != ViewType.PROJECTION_VIEW) {
+			setTextColor(1.0f, 1.0f, 1.0f, 0.5f);
+			drawTextRaster(getScene().getControlModeText(), 1, 1);
+
+			for (int i = 0; i < Scene.HELP.length; ++i) {
+				drawTextRaster(Scene.HELP[i], 1, i + 3);
+			}
+		}
+		*/
+
+		// ---- 3D SCENE ----
+
+		// projection setup
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		if (!useCustomMatrices()) {
+			gl.glLoadIdentity();
+			gl.glLoadMatrixd(ProjectionUtils.getPerspectiveMatrix(45.0, (double) getWidth() / getHeight(), getCamera().getNearClippingPlane(), getCamera().getFarClippingPlane()), 0);
+		} else {
+			gl.glLoadMatrixd(getProjectionMatrix(), 0);
+		}
+
+		// view setup
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		if (!useCustomMatrices()) {
+			Camera c = getCamera();
+			gl.glLoadIdentity();
+			gl.glTranslated(c.getTranslateX(), c.getTranslateY(), -c.getDistance());
+			gl.glRotated(c.getRotateX() - 90.0, 1.0, 0.0, 0.0);
+			gl.glRotated(c.getRotateZ(), 0.0, 0.0, 1.0);
+		} else {
+			gl.glLoadMatrixd(getModelviewMatrix(), 0);
+		}
+
+		// fetch viewport, and projection/modelview matrices
+		fetchView(gl);
+
+		// draw static elements
+		if (true /* XXX FIXME viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE*/) {
+			gl.glColor4fv(NavigationGrid.AXIS_COLOR, 0);
+			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getAxisLines());
+
+			drawText3D("X", getScene().getNavigationGrid().getAxisLines()[3], getScene().getNavigationGrid().getAxisLines()[4], getScene().getNavigationGrid().getAxisLines()[5]);
+			drawText3D("Y", getScene().getNavigationGrid().getAxisLines()[9], getScene().getNavigationGrid().getAxisLines()[10], getScene().getNavigationGrid().getAxisLines()[11]);
+
+			gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
+			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getGridLines());
+		}
+
+		// draw model elements
+		if (!getScene().getCurrentTool().isExclusive()) {
+			getScene().getRenderer().renderModel(gl, this);
+		}
+		getScene().getCurrentTool().draw3D(gl, this);
+		
+		// ---- 2D SCENE ----
+
+		// projection setup
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glLoadIdentity();
+
+		// view setup
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glLoadIdentity();
+
+		// draw calibration elements
+	}
+	
+	// XXX FIXME
+	private boolean useCustomMatrices() {
+		return false;
+	}
+	
+	
 	@Override
 	public void reshape(GLAutoDrawable drawable, GL2 gl, GLU glu, int x, int y, int width, int height) {
 		if (height == 0)
@@ -242,6 +329,8 @@ public abstract class AbstractView implements IView {
 		scene.mouseDragged(e, this);
 	}
 
+	// mouse wheel listener
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		scene.mouseWheelMoved(e, this);
@@ -251,28 +340,28 @@ public abstract class AbstractView implements IView {
 
 	private Rectangle2D fontBounds = null;
 
-	protected void drawTextRaster(GLAutoDrawable drawable, String text, int col, int row) {
+	protected void drawTextRaster(String text, int col, int row) {
 		if (fontBounds == null)
 			fontBounds = textRenderer.getBounds("W");
 		double y = getHeight() - fontBounds.getHeight() * (row + 1);
 		double x = fontBounds.getWidth() * col;
-		drawText2D(drawable, text, x, y);
+		drawText2D(text, x, y);
 	}
 
-	protected void drawText2D(GLAutoDrawable drawable, String text, double x, double y) {
-		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
+	protected void drawText2D(String text, double x, double y) {
+		textRenderer.beginRendering(getWidth(), getHeight());
 		textRenderer.draw(text, (int) x, (int) y);
 		textRenderer.endRendering();
 	}
 
-	protected void drawText3D(GLAutoDrawable drawable, String text, double x, double y, double z) {
-		drawText3D(drawable, text, x, y, z, 0, 0);
+	protected void drawText3D(String text, double x, double y, double z) {
+		drawText3D(text, x, y, z, 0, 0);
 	}
 
-	protected void drawText3D(GLAutoDrawable drawable, String text, double x, double y, double z, int dx, int dy) {
+	protected void drawText3D(String text, double x, double y, double z, int dx, int dy) {
 		double[] v = new double[3];
 		glu.gluProject(x, y, z, modelviewMatrix, 0, projectionMatrix, 0, viewport, 0, v, 0);
-		textRenderer.beginRendering(drawable.getWidth(), drawable.getHeight());
+		textRenderer.beginRendering(getWidth(), getHeight());
 		textRenderer.draw(text, (int) v[0] + dx, (int) v[1] + dy);
 		textRenderer.endRendering();
 	}
