@@ -42,7 +42,7 @@ import ch.ethz.fcl.mogl.scene.NavigationGrid;
  * @author radar
  * 
  */
-// XXX lots to do (silhouettes, shader optimizations, etc...)
+// XXX work in progress (silhouettes, shader optimizations, etc...)
 
 public class ShadowVolumeRenderer implements IRenderer {
 	private enum StencilShadowMethod {
@@ -52,7 +52,7 @@ public class ShadowVolumeRenderer implements IRenderer {
 	
 	private static final StencilShadowMethod STENCIL_SHADOW_METHOD = StencilShadowMethod.ZFAIL;
 	
-	// XXX FIXME
+	// XXX work in progress
 	private static final float[] MODEL_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private static final float[] SHADOW_COLOR = { 1, 0, 0, 1 };
 	

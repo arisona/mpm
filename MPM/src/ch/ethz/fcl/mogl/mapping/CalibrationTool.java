@@ -11,17 +11,17 @@ import javax.media.opengl.GL2;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
 import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.scene.AbstractTool;
 import ch.ethz.fcl.mogl.scene.IView;
-import ch.ethz.fcl.mogl.scene.IView.ViewType;
 import ch.ethz.fcl.util.PreferencesStore;
 
 public final class CalibrationTool extends AbstractTool {
 	// @formatter:off
 	private static final String[] CALIBRATION_HELP = {
+		"Calibration Tool for 3D Mapping",
+		"",
 		"[0] Return",
 		"",
 		"[C] Clear Calibration",
@@ -53,7 +53,12 @@ public final class CalibrationTool extends AbstractTool {
 	}
 
 	@Override
-	public void draw3D(GL2 gl, IView view) {
+	public void render3D(GL2 gl, IView view) {
+		if (!view.isCurrent())
+			return;
+
+		renderGrid(gl, view);
+		
 		updateVBOs(gl);
 
 		gl.glColor4fv(MODEL_COLOR, 0);
@@ -72,19 +77,13 @@ public final class CalibrationTool extends AbstractTool {
 	}
 
 	@Override
-	public void draw2D(GL2 gl, IView view) {
+	public void render2D(GL2 gl, IView view) {
+		renderUI(gl, view, CALIBRATION_HELP);
+		
+		if (!view.isCurrent())
+			return;
+
 		CalibrationContext context = getContext(view);
-
-		// ---- INFO DISPLAY
-		if (view.getViewType() == ViewType.INTERACTIVE_VIEW) {
-			DrawingUtils.setTextColor(view, 1.0f, 1.0f, 1.0f, 0.5f);
-			// XXX FIXME DrawingUtils.drawTextRaster(view,
-			// getScene().getControlModeText(), 1, 1);
-
-			for (int i = 0; i < CALIBRATION_HELP.length; ++i) {
-				DrawingUtils.drawTextRaster(view, CALIBRATION_HELP[i], 1, i + 3);
-			}
-		}
 
 		// ---- CALIBRATION MODEL
 		float[] c = context.calibrated ? CALIBRATION_COLOR_CALIBRATED : CALIBRATION_COLOR_UNCALIBRATED;

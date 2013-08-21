@@ -29,17 +29,45 @@ package ch.ethz.fcl.mpm.examples.mapping;
 
 import java.awt.event.KeyEvent;
 
+import javax.media.opengl.GL2;
+
 import ch.ethz.fcl.mogl.mapping.BoxCalibrationModel;
 import ch.ethz.fcl.mogl.mapping.CalibrationTool;
 import ch.ethz.fcl.mogl.mapping.FillTool;
 import ch.ethz.fcl.mogl.render.ShadowVolumeRenderer;
 import ch.ethz.fcl.mogl.scene.AbstractScene;
+import ch.ethz.fcl.mogl.scene.AbstractTool;
 import ch.ethz.fcl.mogl.scene.IRenderer;
+import ch.ethz.fcl.mogl.scene.ITool;
 import ch.ethz.fcl.mogl.scene.IView;
 
 public class MappingScene extends AbstractScene {
 	private float[] lightPosition = { 10.0f, 6.0f, 8.0f };
 
+	private final ITool defaultTool = new AbstractTool() {
+		// @formatter:off
+		private final String[] help = {
+			"Simple Mapping Example (Without Content)",
+			"",
+			"[0] Default Tool / View",
+			"[1] Mapping Calibration",
+			"[2] Projector Adjustment",
+			"",
+			"Use Mouse Buttons + Shift or Mouse Wheel to Navigate"
+		};
+		// @formatter:on
+
+		@Override
+		public void render3D(GL2 gl, IView view) {
+			renderGrid(gl, view);
+		}
+
+		@Override
+		public void render2D(GL2 gl, IView view) {
+			renderUI(gl, view, help);
+		}
+	};
+	
 	private final CalibrationTool calibrationTool = new CalibrationTool(new BoxCalibrationModel(0.5f, 0.5f, 0.5f, 0.8f, 0.8f));
 	private final FillTool fillTool = new FillTool();
 	
@@ -47,6 +75,7 @@ public class MappingScene extends AbstractScene {
 
 	public MappingScene() {
 		setLightPosition(lightPosition);
+		setCurrentTool(defaultTool);
 	}
 
 	@Override
@@ -61,14 +90,15 @@ public class MappingScene extends AbstractScene {
 	@Override
 	public void keyPressed(KeyEvent e, IView view) {
 		switch (e.getKeyCode()) {
+		case KeyEvent.VK_0:
 		case KeyEvent.VK_1:
-			super.setCurrentTool(null);
+			setCurrentTool(defaultTool);
 			break;
 		case KeyEvent.VK_2:
-			super.setCurrentTool(calibrationTool);
+			setCurrentTool(calibrationTool);
 			break;
 		case KeyEvent.VK_3:
-			super.setCurrentTool(fillTool);
+			setCurrentTool(fillTool);
 			break;
 		default:
 			super.keyPressed(e, view);
@@ -83,5 +113,10 @@ public class MappingScene extends AbstractScene {
 
 	public void setLightPosition(float[] position) {
 		lightPosition = position;
+	}
+	
+	@Override
+	public SampleTriangleModel getModel() {
+		return (SampleTriangleModel)super.getModel();
 	}
 }

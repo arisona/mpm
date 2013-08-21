@@ -66,6 +66,9 @@ public interface IView extends KeyListener, MouseListener, MouseMotionListener, 
 	GLU getGLU();
 	TextRenderer getTextRenderer();
 	
+	boolean isEnabled();
+	boolean isCurrent();
+	
 	/**
 	 * Called immediately after the OpenGL context is initialized. Can be used
 	 * to perform one-time initialization. Run only once. Caution: If you used

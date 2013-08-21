@@ -6,12 +6,28 @@ import java.awt.event.MouseWheelEvent;
 
 import javax.media.opengl.GL2;
 
+import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.scene.IView.ViewType;
+
 public abstract class AbstractTool implements ITool {
 	public static final int SNAP_SIZE = 4;
 	
 	private boolean enabled = true;
 	private boolean exclusive = false;
 
+	protected void renderUI(GL2 gl, IView view, String[] text) {
+		if (view.getViewType() == ViewType.INTERACTIVE_VIEW) {
+			DrawingUtils.setTextColor(view, 1.0f, 1.0f, 1.0f, 0.5f);
+			for (int i = 0; i < text.length; ++i) {
+				DrawingUtils.drawTextRaster(view, text[i], 1, i + 1);
+			}
+		}
+	}
+	
+	protected void renderGrid(GL2 gl, IView view) {
+		view.getScene().getNavigationGrid().render(gl, view);
+	}
+	
 	@Override
 	public boolean isExclusive() {
 		return exclusive;
@@ -35,11 +51,11 @@ public abstract class AbstractTool implements ITool {
 	
 	// draw routine
 	@Override
-	public void draw3D(GL2 gl, IView view) {
+	public void render3D(GL2 gl, IView view) {
 	}
 	
 	@Override
-	public void draw2D(GL2 gl, IView view) {
+	public void render2D(GL2 gl, IView view) {
 	}
 	
 

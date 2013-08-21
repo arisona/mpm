@@ -48,6 +48,7 @@ public abstract class AbstractScene implements IScene {
 	private final NavigationTool navigationTool = new NavigationTool();
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
+	private IView currentView = null;
 	private ITool currentTool = new NullTool();
 	
 	@Override
@@ -63,6 +64,8 @@ public abstract class AbstractScene implements IScene {
 	@Override
 	public void addView(IView view) {
 		views.add(view);
+		if (currentView == null)
+			currentView = view;
 	}
 
 	@Override
@@ -78,8 +81,12 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public boolean isEnabled(IView view) {
-		// XXX FIXME
 		return true;
+	}
+	
+	@Override
+	public IView getCurrentView() {
+		return currentView;
 	}
 
 	@Override
@@ -112,6 +119,7 @@ public abstract class AbstractScene implements IScene {
 	public void keyPressed(KeyEvent e, IView view) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			System.exit(0);
+		updateCurrentView(view);
 		currentTool.keyPressed(e, view);
 	}
 	
@@ -135,7 +143,8 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mousePressed(MouseEvent e, IView view) {
-		if (!modifierPressed(e))
+		updateCurrentView(view);
+		if (!isModifierDown(e))
 			currentTool.mousePressed(e, view);
 		else 
 			navigationTool.mousePressed(e, view);
@@ -143,7 +152,7 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mouseReleased(MouseEvent e, IView view) {
-		if (!modifierPressed(e))
+		if (!isModifierDown(e))
 			currentTool.mouseReleased(e, view);
 		else 
 			navigationTool.mouseReleased(e, view);
@@ -163,7 +172,7 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mouseDragged(MouseEvent e, IView view) {
-		if (!modifierPressed(e))
+		if (!isModifierDown(e))
 			currentTool.mouseDragged(e, view);
 		else
 			navigationTool.mouseDragged(e, view);
@@ -173,10 +182,21 @@ public abstract class AbstractScene implements IScene {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e, IView view) {
+		// TODO: update current view here?
 		navigationTool.mouseWheelMoved(e, view);
 	}
 	
-	private boolean modifierPressed(MouseEvent e) {
+	
+	// private stuff
+	
+	private boolean isModifierDown(MouseEvent e) {
 		return e.isShiftDown() || e.isControlDown() || e.isAltDown() || e.isMetaDown();
 	}
+	
+	private void updateCurrentView(IView view) {
+		if (currentView != view) {
+			currentView = view;
+			repaintAll();
+		}
+	}	
 }

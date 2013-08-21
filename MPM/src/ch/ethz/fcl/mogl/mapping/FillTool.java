@@ -8,7 +8,9 @@ import ch.ethz.fcl.mogl.scene.IView.ViewType;
 
 public final class FillTool extends AbstractTool {
 	// @formatter:off
-	public static final String[] FILL_HELP = {
+	private static final String[] FILL_HELP = {
+		"Fill Tool for Projector Adjustment",
+		"",
 		"[0] Return"
 	};
 	// @formatter:on
@@ -18,9 +20,12 @@ public final class FillTool extends AbstractTool {
 	}
 
 	@Override
-	public void draw2D(GL2 gl, IView view) {
-		if (view.getViewType() != ViewType.MAPPED_VIEW)
+	public void render2D(GL2 gl, IView view) {
+		renderUI(gl, view, FILL_HELP);
+
+		if (view.getViewType() != ViewType.MAPPED_VIEW || !view.isCurrent())
 			return;
+
 		gl.glColor4f(1, 1, 1, 1);
 		gl.glRectd(-1, -1, -0.1, -0.1);
 		gl.glRectd(1, -1, 0.1, -0.1);

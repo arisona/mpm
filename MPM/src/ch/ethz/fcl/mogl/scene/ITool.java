@@ -13,8 +13,8 @@ public interface ITool {
 	boolean isExclusive();
 	void setExclusive(boolean exclusive);
 	
-	void draw3D(GL2 gl, IView view);
-	void draw2D(GL2 gl, IView view);
+	void render3D(GL2 gl, IView view);
+	void render2D(GL2 gl, IView view);
 	
 	// key listener
 

@@ -1,4 +1,4 @@
-package ch.ethz.fcl.mpm;
+package ch.ethz.fcl.mpm.examples.mapping;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +16,11 @@ import ch.ethz.fcl.net.osc.OSCServer;
 import ch.ethz.fcl.net.util.UDPServer;
 
 // XXX experimental
-// XXX suppress "unused" warnings, as geometry server features are frequently disabled
 @SuppressWarnings("unused")
 public class GeometryServer {
-	private Scene scene;
+	private MappingScene scene;
 
-	public GeometryServer(Scene scene) {
+	public GeometryServer(MappingScene scene) {
 		this.scene = scene;
 
 		//runOSCScan(32000);

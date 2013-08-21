@@ -47,8 +47,10 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 /**
  * OpenGL frame class (i.e. an OpenGL window) that combines a GLCanvas and a
- * JFrame. TODO: The OpenGL Capabilities code here is still unflexible, and need
- * to be improved
+ * JFrame.
+ * 
+ * TODO: The OpenGL Capabilities code here is still inflexible, and needs to be
+ * improved
  * 
  * @author radar
  * 

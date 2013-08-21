@@ -37,7 +37,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
 import ch.ethz.fcl.mogl.gl.Frame;
 import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 
@@ -153,13 +152,18 @@ public abstract class AbstractView implements IView {
 	public TextRenderer getTextRenderer() {
 		return textRenderer;
 	}
-
-	private void fetchView(GL2 gl) {
-		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projectionMatrix, 0);
-		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelviewMatrix, 0);
+	
+	@Override
+	public boolean isEnabled() {
+		return getScene().isEnabled(this);
 	}
-
+	
+	@Override
+	public boolean isCurrent() {
+		return getScene().getCurrentView() == this;
+	}
+	
+	
 	// opengl handling
 
 	@Override
@@ -231,23 +235,11 @@ public abstract class AbstractView implements IView {
 		// fetch viewport, and projection/modelview matrices
 		fetchView(gl);
 
-		// draw static elements
-		if (true /* XXX FIXME viewType != ViewType.PROJECTION_VIEW || getScene().getControlMode() != ControlMode.NAVIGATE*/) {
-			gl.glColor4fv(NavigationGrid.AXIS_COLOR, 0);
-			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getAxisLines());
-
-			DrawingUtils.drawText3D(this, "X", getScene().getNavigationGrid().getAxisLines()[3], getScene().getNavigationGrid().getAxisLines()[4], getScene().getNavigationGrid().getAxisLines()[5]);
-			DrawingUtils.drawText3D(this, "Y", getScene().getNavigationGrid().getAxisLines()[9], getScene().getNavigationGrid().getAxisLines()[10], getScene().getNavigationGrid().getAxisLines()[11]);
-
-			gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
-			DrawingUtils.drawLines(gl, getScene().getNavigationGrid().getGridLines());
-		}
-
 		// draw model elements
 		if (!getScene().getCurrentTool().isExclusive()) {
 			getScene().getRenderer().renderModel(gl, this);
 		}
-		getScene().getCurrentTool().draw3D(gl, this);
+		getScene().getCurrentTool().render3D(gl, this);
 		
 		// ---- 2D SCENE ----
 
@@ -259,7 +251,7 @@ public abstract class AbstractView implements IView {
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		getScene().getCurrentTool().draw2D(gl, this);
+		getScene().getCurrentTool().render2D(gl, this);
 	}	
 	
 	@Override
@@ -346,4 +338,12 @@ public abstract class AbstractView implements IView {
 		scene.mouseWheelMoved(e, this);
 	}
 
+	
+	// private stuff
+	
+	private void fetchView(GL2 gl) {
+		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
+		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projectionMatrix, 0);
+		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelviewMatrix, 0);
+	}	
 }
