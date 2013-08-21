@@ -49,9 +49,9 @@ public class MappingScene extends AbstractScene {
 		private final String[] help = {
 			"Simple Mapping Example (Without Content)",
 			"",
-			"[0] Default Tool / View",
-			"[1] Mapping Calibration",
-			"[2] Projector Adjustment",
+			"[1] Default Tool / View",
+			"[2] Mapping Calibration",
+			"[3] Projector Adjustment",
 			"",
 			"Use Mouse Buttons + Shift or Mouse Wheel to Navigate"
 		};
