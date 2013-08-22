@@ -28,7 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package ch.ethz.fcl.mogl.gl;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -43,38 +42,94 @@ import com.jogamp.common.nio.Buffers;
  */
 // XXX work in progress
 public class VBO {
-	private int vbo;
+	private int vboV;
+	private int vboN;
+	private int vboC;
+	private boolean hasNormals;
+	private boolean hasColors;
 	private int size;
 
-	public VBO(GL2 gl, float[] vertices) {
+	public VBO(GL2 gl, boolean hasNormals, boolean hasColors) {
 		// generate a VBO pointer / handle
-		IntBuffer buf = Buffers.newDirectIntBuffer(1);
-		gl.glGenBuffers(1, buf);
-		vbo = buf.get();
-		size = vertices.length;
+		int[] buf = new int[3];
+		gl.glGenBuffers(3, buf, 0);
+		vboV = buf[0];
+		vboN = buf[1];
+		vboC = buf[2];
+		this.hasNormals = hasNormals;
+		this.hasColors = hasColors;
+	}
 
-		FloatBuffer data = Buffers.newDirectFloatBuffer(vertices);
-		data.rewind();
+	public void load(GL2 gl, int length, float[] vertices, float[] normals, float[] colors) {
+		size = length * 3;
 
-		int bytesPerFloat = Float.SIZE / Byte.SIZE;
+		if (vertices != null) {
+			FloatBuffer data = Buffers.newDirectFloatBuffer(vertices);
+			data.rewind();
 
-		// transfer data to VBO
-		int numBytes = data.capacity() * bytesPerFloat;
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
-		gl.glBufferData(GL.GL_ARRAY_BUFFER, numBytes, data, GL.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+			int bytesPerFloat = Float.SIZE / Byte.SIZE;
+
+			// transfer data to VBO
+			int numBytes = data.capacity() * bytesPerFloat;
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboV);
+			gl.glBufferData(GL.GL_ARRAY_BUFFER, numBytes, data, GL.GL_STATIC_DRAW);
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+		}
+
+		if (hasNormals && normals != null) {
+			FloatBuffer data = Buffers.newDirectFloatBuffer(normals);
+			data.rewind();
+
+			int bytesPerFloat = Float.SIZE / Byte.SIZE;
+
+			// transfer data to VBO
+			int numBytes = data.capacity() * bytesPerFloat;
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboN);
+			gl.glBufferData(GL.GL_ARRAY_BUFFER, numBytes, data, GL.GL_STATIC_DRAW);
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+		}
+
+		if (hasColors && colors != null) {
+			FloatBuffer data = Buffers.newDirectFloatBuffer(colors);
+			data.rewind();
+
+			int bytesPerFloat = Float.SIZE / Byte.SIZE;
+
+			// transfer data to VBO
+			int numBytes = data.capacity() * bytesPerFloat;
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboC);
+			gl.glBufferData(GL.GL_ARRAY_BUFFER, numBytes, data, GL.GL_STATIC_DRAW);
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+		}
 	}
 
 	public void render(GL2 gl, int mode) {
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
+		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboV);
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
+
+		if (hasNormals) {
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboN);
+			gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+			gl.glNormalPointer(GL.GL_FLOAT, 0, 0);
+		}
+
+		if (hasColors) {
+			gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboC);
+			gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
+			gl.glColorPointer(4, GL.GL_FLOAT, 0, 0);
+		}
+
 		gl.glDrawArrays(mode, 0, size / 3);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+		if (hasNormals)
+			gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+		if (hasColors)
+			gl.glDisableClientState(GL2.GL_COLOR_ARRAY);
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
 	}
 
 	public void dispose(GL2 gl) {
-		gl.glDeleteBuffers(1, new int[] { vbo }, 0);
+		gl.glDeleteBuffers(3, new int[] { vboV, vboN, vboC }, 0);
 	}
 }

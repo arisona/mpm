@@ -301,10 +301,12 @@ public final class CalibrationTool extends AbstractTool {
 	// vbo handling
 	private void updateVBOs(GL2 gl) {
 		if (vboVertices == null && model.getCalibrationVertices() != null) {
-			vboVertices = new VBO(gl, model.getCalibrationVertices());
+			vboVertices = new VBO(gl, false, false);
+			vboVertices.load(gl, model.getCalibrationVertices().length / 3, model.getCalibrationVertices(), null, null);
 		}
 		if (vboEdges == null && model.getCalibrationLines() != null) {
-			vboEdges = new VBO(gl, model.getCalibrationLines());
+			vboEdges = new VBO(gl, false, false);
+			vboEdges.load(gl,  model.getCalibrationLines().length / 3, model.getCalibrationLines(), null, null);
 		}
 	}
 
