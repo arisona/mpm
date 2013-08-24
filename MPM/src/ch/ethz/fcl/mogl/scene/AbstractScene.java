@@ -43,8 +43,11 @@ import ch.ethz.fcl.mogl.model.IModel;
  * 
  */
 public abstract class AbstractScene implements IScene {
+	
 	private IModel model;
+	
 	private final ArrayList<IView> views = new ArrayList<IView>();
+	
 	private final NavigationTool navigationTool = new NavigationTool();
 	private final NavigationGrid navigationGrid = new NavigationGrid(10, 0.1f);
 
@@ -111,6 +114,12 @@ public abstract class AbstractScene implements IScene {
 	@Override
 	public NavigationGrid getNavigationGrid() {
 		return navigationGrid;
+	}
+	
+	@Override
+	public float[] getLightPosition() {
+		// XXX light handling isn't really complete yet
+		return null;
 	}
 	
 	// key listener

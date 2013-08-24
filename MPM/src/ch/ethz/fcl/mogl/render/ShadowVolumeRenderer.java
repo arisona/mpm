@@ -30,8 +30,7 @@ package ch.ethz.fcl.mogl.render;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-
+import ch.ethz.fcl.mogl.geom.BoundingVolume;
 import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.scene.IRenderer;
 import ch.ethz.fcl.mogl.scene.IView;
@@ -64,19 +63,18 @@ public class ShadowVolumeRenderer implements IRenderer {
 			throw new UnsupportedOperationException("can only render models that implement ITriangleModel");
 	
 		ITriangleModel model = (ITriangleModel)view.getScene().getModel();
-		Vector3D min = model.getExtentMin();
-		Vector3D max = model.getExtentMax();
+		BoundingVolume bounds = model.getBounds();
 		
 		// enable depth test
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 
-		// render ground plane
+		// render ground plane (XXX FIXME: currently too small...)
 		gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
 		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex3d(min.getX(), min.getY(), -0.001);
-		gl.glVertex3d(max.getX(), min.getY(), -0.001);
-		gl.glVertex3d(max.getX(), max.getY(), -0.001);
-		gl.glVertex3d(min.getX(), max.getY(), -0.001);
+		gl.glVertex3d(bounds.getMinX(), bounds.getMinY(), -0.001);
+		gl.glVertex3d(bounds.getMaxX(), bounds.getMinY(), -0.001);
+		gl.glVertex3d(bounds.getMaxX(), bounds.getMaxY(), -0.001);
+		gl.glVertex3d(bounds.getMinX(), bounds.getMaxY(), -0.001);
 		gl.glEnd();
 
 		// render geometry

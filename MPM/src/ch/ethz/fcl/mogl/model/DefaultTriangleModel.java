@@ -27,28 +27,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package ch.ethz.fcl.mogl.model;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import ch.ethz.fcl.mogl.geom.BoundingVolume;
 
 public class DefaultTriangleModel implements ITriangleModel {
 	private float[] faces;
 	private float[] normals;
 	private float[] colors;
-	private Vector3D extentMin = new Vector3D(0, 0, 0);
-	private Vector3D extentMax = new Vector3D(0, 0, 0);
+	private BoundingVolume bounds = new BoundingVolume();
 
 	public DefaultTriangleModel() {
 	}
 
 	@Override
-	public Vector3D getExtentMin() {
-		return extentMin;
+	public BoundingVolume getBounds() {
+		return bounds;
 	}
-
-	@Override
-	public Vector3D getExtentMax() {
-		return extentMax;
-	}
-
+	
 	@Override
 	public float[] getFaces() {
 		return faces;
@@ -72,18 +66,8 @@ public class DefaultTriangleModel implements ITriangleModel {
 		this.faces = faces;
 		this.colors = colors;
 		this.normals = null;
-
-		float[] extent = new float[] { Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY,
-				Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY };
 		for (int i = 0; i < faces.length; i += 3) {
-			extent[0] = Math.max(extent[0], faces[i]);
-			extent[1] = Math.min(extent[1], faces[i]);
-			extent[2] = Math.max(extent[2], faces[i+1]);
-			extent[3] = Math.min(extent[3], faces[i+1]);
-			extent[4] = Math.max(extent[4], faces[i+2]);
-			extent[5] = Math.min(extent[5], faces[i+2]);
+			bounds.add(faces[i], faces[i+1], faces[i+2]);
 		}
-		extentMin = new Vector3D(extent[0], extent[2], extent[4]);
-		extentMax = new Vector3D(extent[1], extent[3], extent[5]);
 	}
 }

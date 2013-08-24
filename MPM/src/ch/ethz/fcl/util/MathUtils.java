@@ -39,4 +39,10 @@ public final class MathUtils {
 	public static RealVector toRealVector(Vector3D v) {
 		return new ArrayRealVector(v.toArray(), false);
 	}
+
+	public static double map(double sourceValue, double sourceMin, double sourceMax, double targetMin, double targetMax) {
+		if (sourceMax - sourceMin == 0)
+			return 0;
+		return (sourceValue - sourceMin) * (targetMax - targetMin) / (sourceMax - sourceMin) + targetMin;
+	}
 }

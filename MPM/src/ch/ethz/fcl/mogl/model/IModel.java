@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package ch.ethz.fcl.mogl.model;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import ch.ethz.fcl.mogl.geom.BoundingVolume;
 
 /**
  * Interface for all models to be rendered / interacted with. At this point, the
@@ -38,7 +38,5 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
  * 
  */
 public interface IModel {
-	Vector3D getExtentMin();
-
-	Vector3D getExtentMax();
+	BoundingVolume getBounds();
 }
