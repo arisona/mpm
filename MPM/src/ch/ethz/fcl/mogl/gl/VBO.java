@@ -49,6 +49,10 @@ public class VBO {
 	private boolean hasColors;
 	private int size;
 
+	public VBO(GL2 gl) {
+		this(gl, false, false);
+	}
+	
 	public VBO(GL2 gl, boolean hasNormals, boolean hasColors) {
 		// generate a VBO pointer / handle
 		int[] buf = new int[3];
@@ -59,9 +63,13 @@ public class VBO {
 		this.hasNormals = hasNormals;
 		this.hasColors = hasColors;
 	}
+	
+	public void load(GL2 gl, float[] vertices) {
+		load(gl, vertices.length / 3, vertices, null, null);
+	}
 
-	public void load(GL2 gl, int length, float[] vertices, float[] normals, float[] colors) {
-		size = length * 3;
+	public void load(GL2 gl, int numVertices, float[] vertices, float[] normals, float[] colors) {
+		size = numVertices * 3;
 
 		if (vertices != null) {
 			FloatBuffer data = Buffers.newDirectFloatBuffer(vertices);

@@ -55,6 +55,8 @@ public class ShadowVolumeRenderer implements IRenderer {
 	private static final float[] MODEL_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private static final float[] SHADOW_COLOR = { 1, 0, 0, 1 };
 	
+	private static final float[] LIGHT_POSITION = { 10, 10, 10 };
+	
 	private boolean enableShadows = false;
 
 	@Override
@@ -85,7 +87,7 @@ public class ShadowVolumeRenderer implements IRenderer {
 		//renderShadowVolumes(gl, view, true);
 
 		// render shadow volumes
-		if (enableShadows) renderShadows(gl, model, view.getScene().getLightPosition(), SHADOW_COLOR);
+		if (enableShadows) renderShadows(gl, model, LIGHT_POSITION, SHADOW_COLOR);
 		
 		// cleanup
 		gl.glDisable(GL2.GL_DEPTH_TEST);

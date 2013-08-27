@@ -41,6 +41,7 @@ import ch.ethz.fcl.mogl.scene.IRenderer;
 import ch.ethz.fcl.mogl.scene.ITool;
 import ch.ethz.fcl.mogl.scene.IView;
 
+// XXX FIXME light position currently not implemented
 public class MappingScene extends AbstractScene {
 	private float[] lightPosition = { 10.0f, 6.0f, 8.0f };
 
@@ -106,7 +107,6 @@ public class MappingScene extends AbstractScene {
 		repaintAll();
 	}
 
-	@Override
 	public float[] getLightPosition() {
 		return lightPosition.clone();
 	}

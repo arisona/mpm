@@ -83,4 +83,7 @@ public final class DrawingUtils {
 		view.getTextRenderer().setColor(r, g, b, a);
 	}
 
+	public static void setTextColor(IView view, float[] rgba) {
+		view.getTextRenderer().setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+	}
 }

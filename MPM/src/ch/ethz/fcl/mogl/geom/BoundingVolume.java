@@ -78,6 +78,12 @@ public final class BoundingVolume {
 	public void add(Vector3D v) {
 		add((float) v.getX(), (float) v.getY(), (float) v.getZ());
 	}
+	
+	public void add(float[] points) {
+		for (int i = 0; i < points.length; i += 3) {
+			add(points[i], points[i+1], points[i+2]);
+		}
+	}
 
 	public void add(BoundingVolume b) {
 		add(b.minX, b.minY, b.minZ);

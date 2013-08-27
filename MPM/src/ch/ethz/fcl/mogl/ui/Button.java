@@ -27,17 +27,48 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package ch.ethz.fcl.mogl.ui;
 
-// XXX COMPLETELY INCOMPLETE (IE DEFUNCT)
+import java.awt.geom.Rectangle2D;
+
+import javax.media.opengl.GL2;
+
+import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.scene.IView;
+
 public class Button {
+	public enum State {
+		DEFAULT(new float[] { 0.6f, 0, 0, 0.75f }),
+		PRESSED(new float[] { 1, 0.2f, 0.2f, 0.75f }),
+		DISABLED(new float[] { 0.5f, 0.5f, 0.5f, 0.75f });
+		
+		State(float[] color) {
+			this.color = color;
+		}
+		
+		public float[] getColor() {
+			return color;
+		}
+		
+		private float[] color;
+	}
+	
 	public interface IButtonAction {
 		void execute(Button button);
 	}
+	
+	private static final float[] COLOR_TEXT = { 1, 1, 1, 1 };
+
+	private static int buttonWidth = 48;
+	private static int buttonHeight = 48;
+
+	private static int buttonGap = 8;
+	
 	
 	private int x;
 	private int y;
 	private String label;
 	private String help;
 	private int key;
+	private State state = State.DEFAULT;
 	private IButtonAction action;
 	
 	public Button(int x, int y, String label, String help, int key) {
@@ -72,6 +103,14 @@ public class Button {
 		return key;
 	}
 	
+	public State getState() {
+		return state;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
+	
 	public IButtonAction getAction() {
 		return action;
 	}
@@ -80,9 +119,27 @@ public class Button {
 		this.action = action;
 	}
 	
-	protected void run() {
+	
+	public void render(GL2 gl, IView view) {
+		float bx = buttonGap + x * (buttonGap + buttonWidth) + buttonWidth / 2;
+		float by = buttonGap + y * (buttonGap + buttonHeight) + buttonHeight / 2;
+		gl.glColor4fv(state.getColor(), 0);
+		gl.glBegin(GL2.GL_TRIANGLE_FAN);
+		gl.glVertex2f(bx - buttonWidth/2, by - buttonHeight/2);
+		gl.glVertex2f(bx - buttonWidth/2, by + buttonHeight/2);
+		gl.glVertex2f(bx + buttonWidth/2, by + buttonHeight/2);
+		gl.glVertex2f(bx + buttonWidth/2, by - buttonHeight/2);
+		gl.glEnd();
+		
+		Rectangle2D b = view.getTextRenderer().getBounds(label);
+		DrawingUtils.setTextColor(view, COLOR_TEXT);
+		DrawingUtils.drawText2D(view, label, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2);
+	}
+	
+	protected void execute() {
 		if (action == null)
 			throw new UnsupportedOperationException("button '" + label + "' has no action defined");
+		
 		action.execute(this);
 	}
 }

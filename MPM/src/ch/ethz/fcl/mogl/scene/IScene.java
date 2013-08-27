@@ -33,6 +33,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.List;
 
 import ch.ethz.fcl.mogl.model.IModel;
+import ch.ethz.fcl.mogl.ui.Button;
 
 /**
  * A 'scene' is the controller that coordinates both model and associated views.
@@ -84,8 +85,8 @@ public interface IScene {
 	public NavigationGrid getNavigationGrid();
 	
 	public IRenderer getRenderer();
-	
-	public float[] getLightPosition();
+
+	public List<Button> getButtons();
 	
 	// key listener
 

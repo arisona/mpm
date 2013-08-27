@@ -39,6 +39,7 @@ import javax.media.opengl.glu.GLU;
 
 import ch.ethz.fcl.mogl.gl.Frame;
 import ch.ethz.fcl.mogl.gl.ProjectionUtils;
+import ch.ethz.fcl.mogl.ui.Button;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -196,18 +197,7 @@ public abstract class AbstractView implements IView {
 		if (!getScene().isEnabled(this))
 			return;
 
-		// ---- INFO DISPLAY
-		/*
-		if (viewType != ViewType.PROJECTION_VIEW) {
-			setTextColor(1.0f, 1.0f, 1.0f, 0.5f);
-			drawTextRaster(getScene().getControlModeText(), 1, 1);
-
-			for (int i = 0; i < Scene.HELP.length; ++i) {
-				drawTextRaster(Scene.HELP[i], 1, i + 3);
-			}
-		}
-		*/
-
+		
 		// ---- 3D SCENE ----
 
 		// projection setup
@@ -241,17 +231,26 @@ public abstract class AbstractView implements IView {
 		}
 		getScene().getCurrentTool().render3D(gl, this);
 		
+		
 		// ---- 2D SCENE ----
 
-		// projection setup
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
-
-		// view setup
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		
 		getScene().getCurrentTool().render2D(gl, this);
+		
+		// ---- PIXEL SPACE (FOR UI)
+		
+		if (getViewType() == ViewType.INTERACTIVE_VIEW) {
+			gl.glMatrixMode(GL2.GL_PROJECTION);
+			gl.glOrtho(0, viewport[2], viewport[3], 0, -1, 1);
+			gl.glMatrixMode(GL2.GL_MODELVIEW);
+			gl.glLoadIdentity();
+			for (Button button : getScene().getButtons()) {
+				button.render(gl, this);
+			}
+		}
 	}	
 	
 	@Override

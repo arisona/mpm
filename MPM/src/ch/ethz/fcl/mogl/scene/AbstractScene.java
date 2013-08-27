@@ -31,9 +31,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.fcl.mogl.model.IModel;
+import ch.ethz.fcl.mogl.ui.Button;
 
 /**
  * Abstract scene class that implements some basic common functionality. Use as
@@ -53,6 +55,8 @@ public abstract class AbstractScene implements IScene {
 
 	private IView currentView = null;
 	private ITool currentTool = new NullTool();
+	
+	private final List<Button> buttons = new ArrayList<Button>();
 	
 	@Override
 	public IModel getModel() {
@@ -117,9 +121,8 @@ public abstract class AbstractScene implements IScene {
 	}
 	
 	@Override
-	public float[] getLightPosition() {
-		// XXX light handling isn't really complete yet
-		return null;
+	public List<Button> getButtons() {
+		return buttons;
 	}
 	
 	// key listener
@@ -194,6 +197,18 @@ public abstract class AbstractScene implements IScene {
 		// TODO: update current view here?
 		navigationTool.mouseWheelMoved(e, view);
 	}
+	
+	
+	// protected stuff
+	
+	protected final void addButton(Button button) {
+		buttons.add(button);
+	}
+	
+	protected final void addButtons(Collection<? extends Button> buttons) {
+		this.buttons.addAll(buttons);
+	}
+
 	
 	
 	// private stuff
