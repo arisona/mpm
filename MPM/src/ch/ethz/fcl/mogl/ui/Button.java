@@ -119,6 +119,11 @@ public class Button {
 		this.action = action;
 	}
 	
+	public boolean hit(int x, int y, IView view) {
+		float bx = buttonGap + this.x * (buttonGap + buttonWidth);
+		float by = buttonGap + this.y * (buttonGap + buttonHeight);
+		return x >= bx && x <= bx + buttonWidth && y >= by && y <= by + buttonHeight;
+	}
 	
 	public void render(GL2 gl, IView view) {
 		float bx = buttonGap + x * (buttonGap + buttonWidth) + buttonWidth / 2;
@@ -136,10 +141,20 @@ public class Button {
 		DrawingUtils.drawText2D(view, label, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2);
 	}
 	
-	protected void execute() {
+	public void fire() {
 		if (action == null)
 			throw new UnsupportedOperationException("button '" + label + "' has no action defined");
-		
+		state = State.PRESSED;
 		action.execute(this);
+	}
+	
+	private static String message = null;
+	
+	public static void setMessage(String message) {
+		Button.message = message;
+	}
+	
+	public static String getMessage() {
+		return message;
 	}
 }

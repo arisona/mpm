@@ -27,6 +27,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package ch.ethz.fcl.mogl.gl;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Line;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
 import ch.ethz.fcl.mogl.scene.IView;
 
 public final class ProjectionUtils {
@@ -95,4 +98,11 @@ public final class ProjectionUtils {
 		return 2.0 * y / view.getHeight() - 1.0;
 	}
 
+	public static Line getRay(IView view, double winX, double winY) {
+		// XXX FIXME: how about near and far???
+		double[] w = new double[8];
+		view.getGLU().gluUnProject(winX, winY, 0.1, view.getModelviewMatrix(), 0, view.getProjectionMatrix(), 0, view.getViewport(), 0, w, 0);
+		view.getGLU().gluUnProject(winX, winY, 0.9, view.getModelviewMatrix(), 0, view.getProjectionMatrix(), 0, view.getViewport(), 0, w, 4);
+		return new Line(new Vector3D(w[0], w[1], w[2]), new Vector3D(w[4], w[5], w[6]));
+	}
 }

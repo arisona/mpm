@@ -40,9 +40,27 @@ public final class MathUtils {
 		return new ArrayRealVector(v.toArray(), false);
 	}
 
-	public static double map(double sourceValue, double sourceMin, double sourceMax, double targetMin, double targetMax) {
+	public static float map(float value, float sourceMin, float sourceMax, float targetMin, float targetMax) {
 		if (sourceMax - sourceMin == 0)
 			return 0;
-		return (sourceValue - sourceMin) * (targetMax - targetMin) / (sourceMax - sourceMin) + targetMin;
+		return (value - sourceMin) * (targetMax - targetMin) / (sourceMax - sourceMin) + targetMin;
+	}
+
+	public static double map(double value, double sourceMin, double sourceMax, double targetMin, double targetMax) {
+		if (sourceMax - sourceMin == 0)
+			return 0;
+		return (value - sourceMin) * (targetMax - targetMin) / (sourceMax - sourceMin) + targetMin;
+	}
+
+	public static int clamp(int value, int min, int max) {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static float clamp(float value, float min, float max) {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static double clamp(double value, double min, double max) {
+		return Math.max(min, Math.min(max, value));
 	}
 }

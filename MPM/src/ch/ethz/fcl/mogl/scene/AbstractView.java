@@ -37,6 +37,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
+import ch.ethz.fcl.mogl.gl.DrawingUtils;
 import ch.ethz.fcl.mogl.gl.Frame;
 import ch.ethz.fcl.mogl.gl.ProjectionUtils;
 import ch.ethz.fcl.mogl.ui.Button;
@@ -249,6 +250,9 @@ public abstract class AbstractView implements IView {
 			gl.glLoadIdentity();
 			for (Button button : getScene().getButtons()) {
 				button.render(gl, this);
+			}
+			if (Button.getMessage() != null) {
+				DrawingUtils.drawText2D(this, Button.getMessage(), 8, 8);
 			}
 		}
 	}	
