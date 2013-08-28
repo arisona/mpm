@@ -89,4 +89,9 @@ public final class BoundingVolume {
 		add(b.minX, b.minY, b.minZ);
 		add(b.maxX, b.maxY, b.maxZ);
 	}
+	
+	@Override
+	public String toString() {
+		return valid ? "[" + minX + "," + maxX + "][" + minY + "," + maxY + "][" + minZ + "," + maxZ + "]" : "invalid";
+	}
 }

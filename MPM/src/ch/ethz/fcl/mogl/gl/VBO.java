@@ -63,6 +63,10 @@ public class VBO {
 		this.hasNormals = hasNormals;
 		this.hasColors = hasColors;
 	}
+
+	public void dispose(GL2 gl) {
+		gl.glDeleteBuffers(3, new int[] { vboV, vboN, vboC }, 0);
+	}
 	
 	public void load(GL2 gl, float[] vertices) {
 		load(gl, vertices.length / 3, vertices, null, null);
@@ -135,9 +139,5 @@ public class VBO {
 		if (hasColors)
 			gl.glDisableClientState(GL2.GL_COLOR_ARRAY);
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
-	}
-
-	public void dispose(GL2 gl) {
-		gl.glDeleteBuffers(3, new int[] { vboV, vboN, vboC }, 0);
 	}
 }

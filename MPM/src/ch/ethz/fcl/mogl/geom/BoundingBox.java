@@ -59,4 +59,9 @@ public final class BoundingBox {
 		add(b.minX, b.minY);
 		add(b.maxX, b.maxY);
 	}
+	
+	@Override
+	public String toString() {
+		return valid ? "[" + minX + "," + maxX + "][" + minY + "," + maxY + "]" : "invalid";
+	}	
 }
