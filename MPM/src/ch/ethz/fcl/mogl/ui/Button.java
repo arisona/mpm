@@ -148,7 +148,6 @@ public class Button {
 	public void fire(IView view) {
 		if (action == null)
 			throw new UnsupportedOperationException("button '" + label + "' has no action defined");
-		state = State.PRESSED;
 		action.execute(this, view);
 	}
 	

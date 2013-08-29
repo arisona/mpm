@@ -1,5 +1,7 @@
 package ch.ethz.fcl.mogl.geom;
 
+import java.util.Collection;
+
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public final class BoundingVolume {
@@ -79,8 +81,13 @@ public final class BoundingVolume {
 		valid = true;
 	}
 
-	public void add(Vector3D v) {
-		add((float) v.getX(), (float) v.getY(), (float) v.getZ());
+	public void add(Vector3D point) {
+		add((float) point.getX(), (float) point.getY(), (float) point.getZ());
+	}
+	
+	public void add(Collection<Vector3D> points) {
+		for (Vector3D point : points)
+			add(point);
 	}
 	
 	public void add(float[] points) {
