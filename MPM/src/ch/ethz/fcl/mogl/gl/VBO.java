@@ -69,11 +69,11 @@ public class VBO {
 	}
 	
 	public void load(GL2 gl, float[] vertices) {
-		load(gl, vertices.length / 3, vertices, null, null);
+		load(gl, 0, vertices, null, null);
 	}
 
 	public void load(GL2 gl, int numVertices, float[] vertices, float[] normals, float[] colors) {
-		size = numVertices * 3;
+		size = numVertices > 0 ? numVertices * 3 : vertices.length;
 
 		if (vertices != null) {
 			FloatBuffer data = Buffers.newDirectFloatBuffer(vertices);

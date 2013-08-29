@@ -74,13 +74,24 @@ public class Button {
 	public Button(int x, int y, String label, String help, int key) {
 		this(x, y, label, help, key, null);
 	}
-
+	
 	public Button(int x, int y, String label, String help, int key, IButtonAction action) {
 		this.x = x;
 		this.y = y;
 		this.label = label;
 		this.help = help;
+		this.key = key;
 		this.action = action;
+	}
+
+	public Button(int x, int y, String label, String help, int key, State state, IButtonAction action) {
+		this(x, y, label, help, key, action);
+		setState(state);
+	}
+
+	public Button(int x, int y, String label, String help, int key, boolean pressed, IButtonAction action) {
+		this(x, y, label, help, key, action);
+		setState(pressed);
 	}
 	
 	public int getX() {
@@ -146,6 +157,8 @@ public class Button {
 	}
 	
 	public void fire(IView view) {
+		if (state == State.DISABLED)
+			return;
 		if (action == null)
 			throw new UnsupportedOperationException("button '" + label + "' has no action defined");
 		action.execute(this, view);

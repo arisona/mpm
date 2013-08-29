@@ -121,7 +121,7 @@ public class Camera {
 	}
 
 	public void addToTranslateY(double delta) {
-		translateY += delta;
+		translateY += distance / 10.0 * delta;
 	}
 	
 	public void frame(BoundingVolume bounds) {
