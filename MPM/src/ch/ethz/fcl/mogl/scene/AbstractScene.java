@@ -135,7 +135,7 @@ public abstract class AbstractScene implements IScene {
 		// buttons have precedence over tools
 		for (Button button : view.getScene().getButtons()) {
 			if (button.getKey() == e.getKeyCode()) {
-				button.fire();
+				button.fire(view);
 				view.getScene().repaintAll();
 				return;
 			}
@@ -175,7 +175,7 @@ public abstract class AbstractScene implements IScene {
 		if (view.getViewType() == ViewType.INTERACTIVE_VIEW) {
 			for (Button button : view.getScene().getButtons()) {
 				if (button.hit(e.getPoint().x, e.getPoint().y, view)) {
-					button.fire();
+					button.fire(view);
 					view.getScene().repaintAll();
 					return;
 				}

@@ -52,7 +52,7 @@ public class Button {
 	}
 	
 	public interface IButtonAction {
-		void execute(Button button);
+		void execute(Button button, IView view);
 	}
 	
 	private static final float[] COLOR_TEXT = { 1, 1, 1, 1 };
@@ -111,6 +111,10 @@ public class Button {
 		this.state = state;
 	}
 	
+	public void setState(boolean pressed) {
+		setState(pressed ? State.PRESSED : State.DEFAULT);
+	}
+	
 	public IButtonAction getAction() {
 		return action;
 	}
@@ -141,11 +145,11 @@ public class Button {
 		DrawingUtils.drawText2D(view, label, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2);
 	}
 	
-	public void fire() {
+	public void fire(IView view) {
 		if (action == null)
 			throw new UnsupportedOperationException("button '" + label + "' has no action defined");
 		state = State.PRESSED;
-		action.execute(this);
+		action.execute(this, view);
 	}
 	
 	private static String message = null;

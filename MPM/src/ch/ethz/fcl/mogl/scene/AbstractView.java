@@ -206,7 +206,7 @@ public abstract class AbstractView implements IView {
 		if (updateMatrices) {
 			Camera c = getCamera();
 			gl.glLoadIdentity();
-			gl.glLoadMatrixd(ProjectionUtils.getPerspectiveMatrix(45.0, (double) getWidth() / getHeight(), c.getNearClippingPlane(), c.getFarClippingPlane()), 0);
+			gl.glLoadMatrixd(ProjectionUtils.getPerspectiveMatrix(c.getFOV(), (double) getWidth() / getHeight(), c.getNearClippingPlane(), c.getFarClippingPlane()), 0);
 		} else {
 			gl.glLoadMatrixd(getProjectionMatrix(), 0);
 		}
