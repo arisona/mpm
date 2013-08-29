@@ -2,10 +2,10 @@ package ch.ethz.fcl.mogl.geom;
 
 public final class BoundingBox {
 	boolean valid;
-	float minX;
-	float maxX;
-	float minY;
-	float maxY;
+	double minX;
+	double maxX;
+	double minY;
+	double maxY;
 
 	public BoundingBox() {
 		reset();
@@ -23,31 +23,31 @@ public final class BoundingBox {
 		return valid;
 	}
 
-	public float getMinX() {
+	public double getMinX() {
 		return minX;
 	}
 
-	public float getMaxX() {
+	public double getMaxX() {
 		return maxX;
 	}
 
-	public float getMinY() {
+	public double getMinY() {
 		return minY;
 	}
 
-	public float getMaxY() {
+	public double getMaxY() {
 		return maxY;
 	}
 
-	public float getExtentX() {
+	public double getExtentX() {
 		return maxX - minX;
 	}
 
-	public float getExtentY() {
+	public double getExtentY() {
 		return maxY - minY;
 	}
 
-	public void add(float x, float y) {
+	public void add(double x, double y) {
 		minX = Math.min(minX, x);
 		maxX = Math.max(maxX, x);
 		minY = Math.min(minY, y);

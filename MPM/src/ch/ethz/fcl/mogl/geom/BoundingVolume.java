@@ -4,12 +4,12 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public final class BoundingVolume {
 	boolean valid;
-	float minX;
-	float maxX;
-	float minY;
-	float maxY;
-	float minZ;
-	float maxZ;
+	double minX;
+	double maxX;
+	double minY;
+	double maxY;
+	double minZ;
+	double maxZ;
 
 	public BoundingVolume() {
 		reset();
@@ -29,43 +29,47 @@ public final class BoundingVolume {
 		return valid;
 	}
 
-	public float getMinX() {
+	public double getMinX() {
 		return minX;
 	}
 
-	public float getMaxX() {
+	public double getMaxX() {
 		return maxX;
 	}
 
-	public float getMinY() {
+	public double getMinY() {
 		return minY;
 	}
 
-	public float getMaxY() {
+	public double getMaxY() {
 		return maxY;
 	}
 
-	public float getMinZ() {
+	public double getMinZ() {
 		return minZ;
 	}
 
-	public float getMaxZ() {
+	public double getMaxZ() {
 		return maxZ;
 	}
 
-	public float getExtentX() {
+	public double getExtentX() {
 		return maxX - minX;
 	}
 
-	public float getExtentY() {
+	public double getExtentY() {
 		return maxY - minY;
 	}
 
-	public float getExtentZ() {
+	public double getExtentZ() {
 		return maxZ - minZ;
 	}
 
 	public void add(float x, float y, float z) {
+		add((double)x, (double)y, (double)z);
+	}
+
+	public void add(double x, double y, double z) {
 		minX = Math.min(minX, x);
 		maxX = Math.max(maxX, x);
 		minY = Math.min(minY, y);
@@ -80,6 +84,12 @@ public final class BoundingVolume {
 	}
 	
 	public void add(float[] points) {
+		for (int i = 0; i < points.length; i += 3) {
+			add(points[i], points[i+1], points[i+2]);
+		}
+	}
+
+	public void add(double[] points) {
 		for (int i = 0; i < points.length; i += 3) {
 			add(points[i], points[i+1], points[i+2]);
 		}
