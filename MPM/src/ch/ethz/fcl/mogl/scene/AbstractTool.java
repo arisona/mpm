@@ -46,7 +46,7 @@ public abstract class AbstractTool implements ITool {
 		if (view.getViewType() == ViewType.INTERACTIVE_VIEW) {
 			DrawingUtils.setTextColor(view, 1.0f, 1.0f, 1.0f, 0.5f);
 			for (int i = 0; i < text.length; ++i) {
-				DrawingUtils.drawTextRaster(view, text[i], 1, 30 + i + 1);
+				DrawingUtils.drawTextRaster(view, 1, 30 + i + 1, text[i]);
 			}
 		}
 	}

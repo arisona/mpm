@@ -1,5 +1,9 @@
 package ch.ethz.fcl.mogl.geom;
 
+import java.util.Collection;
+
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
 public final class BoundingBox {
 	boolean valid;
 	double minX;
@@ -55,6 +59,15 @@ public final class BoundingBox {
 		valid = true;
 	}
 
+	public void add(Vector2D point) {
+		add(point.getX(), point.getY());
+	}
+	
+	public void add(Collection<Vector2D> points) {
+		for (Vector2D point : points)
+			add(point);
+	}
+	
 	public void add(BoundingBox b) {
 		add(b.minX, b.minY);
 		add(b.maxX, b.maxY);

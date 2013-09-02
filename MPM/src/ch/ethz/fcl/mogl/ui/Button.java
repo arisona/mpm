@@ -153,7 +153,7 @@ public class Button {
 		
 		Rectangle2D b = view.getTextRenderer().getBounds(label);
 		DrawingUtils.setTextColor(view, COLOR_TEXT);
-		DrawingUtils.drawText2D(view, label, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2);
+		DrawingUtils.drawText2D(view, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2, label);
 	}
 	
 	public void fire(IView view) {

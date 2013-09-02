@@ -252,7 +252,7 @@ public abstract class AbstractView implements IView {
 				button.render(gl, this);
 			}
 			if (Button.getMessage() != null) {
-				DrawingUtils.drawText2D(this, Button.getMessage(), 8, 8);
+				DrawingUtils.drawText2D(this, 8, 8, Button.getMessage());
 			}
 		}
 	}	

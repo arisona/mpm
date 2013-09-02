@@ -52,25 +52,25 @@ public final class DrawingUtils {
 		gl.glEnd();
 	}
 
-	public static void drawTextRaster(IView view, String text, int col, int row) {
+	public static void drawTextRaster(IView view, int col, int row, String text) {
 		Rectangle2D fontBounds = view.getTextRenderer().getBounds("W");
 		double y = view.getHeight() - fontBounds.getHeight() * (row + 1);
 		double x = fontBounds.getWidth() * col;
-		drawText2D(view, text, x, y);
+		drawText2D(view, x, y, text);
 	}
 
-	public static  void drawText2D(IView view, String text, double x, double y) {
+	public static  void drawText2D(IView view, double x, double y, String text) {
 		TextRenderer tr = view.getTextRenderer();
 		tr.beginRendering(view.getWidth(), view.getHeight());
 		tr.draw(text, (int) x, (int) y);
 		tr.endRendering();
 	}
 
-	public static void drawText3D(IView view, String text, double x, double y, double z) {
-		drawText3D(view, text, x, y, z, 0, 0);
+	public static void drawText3D(IView view, double x, double y, double z, String text) {
+		drawText3D(view, x, y, z, 0, 0, text);
 	}
 
-	public static void drawText3D(IView view, String text, double x, double y, double z, int dx, int dy) {
+	public static void drawText3D(IView view, double x, double y, double z, int dx, int dy, String text) {
 		double[] v = new double[3];
 		view.getGLU().gluProject(x, y, z, view.getModelviewMatrix(), 0, view.getProjectionMatrix(), 0, view.getViewport(), 0, v, 0);
 		TextRenderer tr = view.getTextRenderer();

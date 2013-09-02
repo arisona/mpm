@@ -50,8 +50,8 @@ public class NavigationGrid {
 		gl.glColor4fv(NavigationGrid.AXIS_COLOR, 0);
 		DrawingUtils.drawLines(gl, getAxisLines());
 
-		DrawingUtils.drawText3D(view, "X", (double)getAxisLines()[3], (double)getAxisLines()[4], (double)getAxisLines()[5]);
-		DrawingUtils.drawText3D(view, "Y", (double)getAxisLines()[9], (double)getAxisLines()[10], (double)getAxisLines()[11]);
+		DrawingUtils.drawText3D(view, (double)getAxisLines()[3], (double)getAxisLines()[4], (double)getAxisLines()[5], "X");
+		DrawingUtils.drawText3D(view, (double)getAxisLines()[9], (double)getAxisLines()[10], (double)getAxisLines()[11], "Y");
 
 		gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
 		DrawingUtils.drawLines(gl, getGridLines());		
