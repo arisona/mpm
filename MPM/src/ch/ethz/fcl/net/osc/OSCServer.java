@@ -59,6 +59,10 @@ public final class OSCServer extends OSCDispatcher implements OSCSender {
 
 	private final Map<String, SocketAddress> remotePeers = new HashMap<String, SocketAddress>();
 
+	public OSCServer(int port) throws UnknownHostException, IOException {
+		this(port, null);
+	}
+	
 	public OSCServer(int port, String multicastAddress) throws UnknownHostException, IOException {
 		address = new InetSocketAddress(AddressUtilities.getDefaultInterface(), port);
 		if (multicastAddress == null) {

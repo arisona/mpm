@@ -15,7 +15,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/MPM/lib/commons-math3/commons-math3-3.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/tuio/libTUIO.jar"/>
 	<classpathentry kind="lib" path="lib/jogl/gluegen-rt-natives-linux-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/jogl/gluegen-rt-natives-linux-i586.jar"/>
 	<classpathentry kind="lib" path="lib/jogl/jogl-all-natives-linux-amd64.jar"/>

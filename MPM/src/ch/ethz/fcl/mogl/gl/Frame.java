@@ -190,8 +190,8 @@ public final class Frame extends GLCanvas {
 		GLCapabilities caps = new GLCapabilities(profile);
 		caps.setAlphaBits(8);
 		caps.setStencilBits(16);
-		// caps.setSampleBuffers(true);
-		// caps.setNumSamples(4);
+		//caps.setSampleBuffers(true);
+		//caps.setNumSamples(4);
 		return caps;
 	}
 }
