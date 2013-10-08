@@ -339,7 +339,6 @@ public abstract class AbstractView implements IView {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// XXX MOUSE WHEEL CURRENTLY COLLIDES WITH TUIO...
 		scene.mouseWheelMoved(e, this);
 	}
 

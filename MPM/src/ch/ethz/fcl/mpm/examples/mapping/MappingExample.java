@@ -64,11 +64,11 @@ public final class MappingExample {
 		//scene.addView(new MappingView(scene, 530, 410, 400, 400, ViewType.MAPPED_VIEW, "3", "View 3", 180.0));
 		//scene.addView(new MappingView(scene, 940, 410, 400, 400, ViewType.MAPPED_VIEW, "4", "View 4", 270.0));
 
-//		try {
-//			new TUIO(scene);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		//try {
+		//	new TUIO(scene);
+		//} catch (Exception e) {
+		//	e.printStackTrace();
+		//}
 		
 		// XXX geometry server currently disabled
 		// new GeometryServer(scene);
