@@ -29,7 +29,6 @@ package ch.ethz.fcl.mpm.examples.mapping;
 
 import javax.swing.SwingUtilities;
 
-import ch.ethz.fcl.hid.tuio.TUIO;
 import ch.ethz.fcl.mogl.model.ITriangleModel;
 import ch.ethz.fcl.mogl.scene.IView.ViewType;
 

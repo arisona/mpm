@@ -53,8 +53,13 @@ public class BoxCalibrationModel implements ICalibrationModel {
 			float bz = boxExtentZ;
 			float px = planeExtentX / 2;
 			float py = planeExtentY / 2;
-			calibrationVertices = new float[] { bx, by, 0, -bx, by, 0, -bx, -by, 0, bx, -by, 0, bx, by, bz, -bx, by, bz, -bx, -by, bz, bx, -by, bz, px, py, 0,
-					-px, py, 0, -px, -py, 0, px, -py, 0 };
+			calibrationVertices = new float[] {
+					// box bottom 
+					bx, by, 0, -bx, by, 0, -bx, -by, 0, bx, -by, 0, 
+					// box top
+					bx, by, bz, -bx, by, bz, -bx, -by, bz, bx, -by, bz,
+					// plane
+					px, py, 0, -px, py, 0, -px, -py, 0, px, -py, 0 };
 
 		}
 		return calibrationVertices;
@@ -63,18 +68,16 @@ public class BoxCalibrationModel implements ICalibrationModel {
 	@Override
 	public float[] getCalibrationLines() {
 		if (calibrationLines == null) {
-			float dx = boxExtentX / 2;
-			float dy = boxExtentY / 2;
-			float dz = boxExtentZ;
+			float bx = boxExtentX / 2;
+			float by = boxExtentY / 2;
+			float bz = boxExtentZ;
 			calibrationLines = new float[] {
 					// bottom
-					dx, dy, 0, -dx, dy, 0, -dx, dy, 0, -dx, -dy, 0, -dx, -dy, 0, dx, -dy, 0, dx, -dy, 0, dx, dy, 0,
-
+					bx, by, 0, -bx, by, 0, -bx, by, 0, -bx, -by, 0, -bx, -by, 0, bx, -by, 0, bx, -by, 0, bx, by, 0,
 					// top
-					dx, dy, dz, -dx, dy, dz, -dx, dy, dz, -dx, -dy, dz, -dx, -dy, dz, dx, -dy, dz, dx, -dy, dz, dx, dy, dz,
-
+					bx, by, bz, -bx, by, bz, -bx, by, bz, -bx, -by, bz, -bx, -by, bz, bx, -by, bz, bx, -by, bz, bx, by, bz,
 					// side
-					dx, dy, 0, dx, dy, dz, -dx, dy, 0, -dx, dy, dz, -dx, -dy, 0, -dx, -dy, dz, dx, -dy, 0, dx, -dy, dz };
+					bx, by, 0, bx, by, bz, -bx, by, 0, -bx, by, bz, -bx, -by, 0, -bx, -by, bz, bx, -by, 0, bx, -by, bz };
 		}
 		return calibrationLines;
 	}
