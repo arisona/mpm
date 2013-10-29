@@ -31,7 +31,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.media.opengl.GL2;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.gl.DrawingUtilities;
 import ch.ethz.fcl.mogl.scene.IView;
 
 public class Button {
@@ -152,8 +152,8 @@ public class Button {
 		gl.glEnd();
 		
 		Rectangle2D b = view.getTextRenderer().getBounds(label);
-		DrawingUtils.setTextColor(view, COLOR_TEXT);
-		DrawingUtils.drawText2D(view, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2, label);
+		DrawingUtilities.setTextColor(view, COLOR_TEXT);
+		DrawingUtilities.drawText2D(view, bx - b.getWidth()/2, view.getHeight() - by - b.getHeight()/2, label);
 	}
 	
 	public void fire(IView view) {

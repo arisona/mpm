@@ -29,7 +29,7 @@ package ch.ethz.fcl.mogl.scene;
 
 import javax.media.opengl.GL2;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.gl.DrawingUtilities;
 
 public class NavigationGrid {
 	public static final float[] AXIS_COLOR = { 1.0f, 1.0f, 1.0f, 0.75f };
@@ -48,13 +48,13 @@ public class NavigationGrid {
 
 	protected void render(GL2 gl, IView view) {
 		gl.glColor4fv(NavigationGrid.AXIS_COLOR, 0);
-		DrawingUtils.drawLines(gl, getAxisLines());
+		DrawingUtilities.drawLines(gl, getAxisLines());
 
-		DrawingUtils.drawText3D(view, (double)getAxisLines()[3], (double)getAxisLines()[4], (double)getAxisLines()[5], "X");
-		DrawingUtils.drawText3D(view, (double)getAxisLines()[9], (double)getAxisLines()[10], (double)getAxisLines()[11], "Y");
+		DrawingUtilities.drawText3D(view, (double)getAxisLines()[3], (double)getAxisLines()[4], (double)getAxisLines()[5], "X");
+		DrawingUtilities.drawText3D(view, (double)getAxisLines()[9], (double)getAxisLines()[10], (double)getAxisLines()[11], "Y");
 
 		gl.glColor4fv(NavigationGrid.GRID_COLOR, 0);
-		DrawingUtils.drawLines(gl, getGridLines());		
+		DrawingUtilities.drawLines(gl, getGridLines());		
 	}
 	
 	public float[] getAxisLines() {

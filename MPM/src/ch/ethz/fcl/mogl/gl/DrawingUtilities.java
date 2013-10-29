@@ -35,7 +35,7 @@ import ch.ethz.fcl.mogl.scene.IView;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
-public final class DrawingUtils {
+public final class DrawingUtilities {
 	public static void drawPoints(GL2 gl, float[] vertices) {
 		gl.glBegin(GL2.GL_POINTS);
 		for (int i = 0; i < vertices.length; i += 3) {

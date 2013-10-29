@@ -38,7 +38,7 @@ import javax.media.opengl.GL2;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-import ch.ethz.fcl.mogl.gl.ProjectionUtils;
+import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
 import ch.ethz.fcl.mogl.gl.VBO;
 import ch.ethz.fcl.mogl.scene.AbstractTool;
 import ch.ethz.fcl.mogl.scene.IView;
@@ -137,7 +137,7 @@ public final class CalibrationTool extends AbstractTool {
 		gl.glBegin(GL2.GL_LINES);
 		for (int i = 0; i < context.projectedVertices.size(); ++i) {
 			Vector3D a = context.modelVertices.get(i);
-			if (!ProjectionUtils.projectToDeviceCoordinates(view, a.getX(), a.getY(), a.getZ(), v))
+			if (!ProjectionUtilities.projectToDeviceCoordinates(view, a.getX(), a.getY(), a.getZ(), v))
 				continue;
 			gl.glVertex3dv(v, 0);
 			a = context.projectedVertices.get(i);
@@ -187,8 +187,8 @@ public final class CalibrationTool extends AbstractTool {
 
 		// first, try to hit calibration point
 		for (int i = 0; i < context.projectedVertices.size(); ++i) {
-			int x = ProjectionUtils.deviceToScreenX(view, context.projectedVertices.get(i).getX());
-			int y = ProjectionUtils.deviceToScreenY(view, context.projectedVertices.get(i).getY());
+			int x = ProjectionUtilities.deviceToScreenX(view, context.projectedVertices.get(i).getX());
+			int y = ProjectionUtilities.deviceToScreenY(view, context.projectedVertices.get(i).getY());
 			if (snap2D(e.getX(), view.getHeight() - e.getY(), x, y)) {
 				// we got a point to move!
 				context.currentSelection = i;
@@ -201,7 +201,7 @@ public final class CalibrationTool extends AbstractTool {
 		float[] mv = model.getCalibrationVertices();
 		double[] vv = new double[3];
 		for (int i = 0; i < mv.length; i += 3) {
-			if (!ProjectionUtils.projectToScreenCoordinates(view, mv[i], mv[i + 1], mv[i + 2], vv))
+			if (!ProjectionUtilities.projectToScreenCoordinates(view, mv[i], mv[i + 1], mv[i + 2], vv))
 				continue;
 			if (snap2D(e.getX(), view.getHeight() - e.getY(), (int) vv[0], (int) vv[1])) {
 				Vector3D a = new Vector3D(mv[i], mv[i + 1], mv[i + 2]);
@@ -211,7 +211,7 @@ public final class CalibrationTool extends AbstractTool {
 				} else {
 					context.currentSelection = context.modelVertices.size();
 					context.modelVertices.add(a);
-					context.projectedVertices.add(new Vector3D(ProjectionUtils.screenToDeviceX(view, (int) vv[0]), ProjectionUtils.screenToDeviceY(view, (int) vv[1]), 0));
+					context.projectedVertices.add(new Vector3D(ProjectionUtilities.screenToDeviceX(view, (int) vv[0]), ProjectionUtilities.screenToDeviceY(view, (int) vv[1]), 0));
 				}
 				calibrate(view);
 				view.repaint();
@@ -224,7 +224,7 @@ public final class CalibrationTool extends AbstractTool {
 	public void mouseDragged(MouseEvent e, IView view) {
 		CalibrationContext context = getContext(view);
 		if (context.currentSelection != -1) {
-			Vector3D a = new Vector3D(ProjectionUtils.screenToDeviceX(view, e.getX()), ProjectionUtils.screenToDeviceY(view, view.getHeight() - e.getY()), 0);
+			Vector3D a = new Vector3D(ProjectionUtilities.screenToDeviceX(view, e.getX()), ProjectionUtilities.screenToDeviceY(view, view.getHeight() - e.getY()), 0);
 			context.projectedVertices.set(context.currentSelection, a);
 			calibrate(view);
 		}

@@ -37,9 +37,9 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.gl.DrawingUtilities;
 import ch.ethz.fcl.mogl.gl.Frame;
-import ch.ethz.fcl.mogl.gl.ProjectionUtils;
+import ch.ethz.fcl.mogl.gl.ProjectionUtilities;
 import ch.ethz.fcl.mogl.ui.Button;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
@@ -207,7 +207,7 @@ public abstract class AbstractView implements IView {
 		if (updateMatrices) {
 			Camera c = getCamera();
 			gl.glLoadIdentity();
-			gl.glLoadMatrixd(ProjectionUtils.getPerspectiveMatrix(c.getFOV(), (double) getWidth() / getHeight(), c.getNearClippingPlane(), c.getFarClippingPlane()), 0);
+			gl.glLoadMatrixd(ProjectionUtilities.getPerspectiveMatrix(c.getFOV(), (double) getWidth() / getHeight(), c.getNearClippingPlane(), c.getFarClippingPlane()), 0);
 		} else {
 			gl.glLoadMatrixd(getProjectionMatrix(), 0);
 		}
@@ -253,7 +253,7 @@ public abstract class AbstractView implements IView {
 				button.render(gl, this);
 			}
 			if (Button.getMessage() != null) {
-				DrawingUtils.drawText2D(this, 8, 8, Button.getMessage());
+				DrawingUtilities.drawText2D(this, 8, 8, Button.getMessage());
 			}
 		}
 	}	

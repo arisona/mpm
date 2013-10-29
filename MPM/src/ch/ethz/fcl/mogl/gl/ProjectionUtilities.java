@@ -32,7 +32,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import ch.ethz.fcl.mogl.scene.IView;
 
-public final class ProjectionUtils {
+public final class ProjectionUtilities {
 	/**
 	 * Returns a perspective projection matrix. Same as gluPerspective, but with
 	 * support for far plane at infinity.

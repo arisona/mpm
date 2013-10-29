@@ -29,7 +29,7 @@ package ch.ethz.fcl.util;
 
 import java.io.File;
 
-public class FileUtils {
+public class FileUtilities {
 	/**
 	 * Get file extension.
 	 * @param file file to get the extension from

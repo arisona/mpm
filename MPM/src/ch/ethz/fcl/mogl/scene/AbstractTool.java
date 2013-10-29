@@ -33,7 +33,7 @@ import java.awt.event.MouseWheelEvent;
 
 import javax.media.opengl.GL2;
 
-import ch.ethz.fcl.mogl.gl.DrawingUtils;
+import ch.ethz.fcl.mogl.gl.DrawingUtilities;
 import ch.ethz.fcl.mogl.scene.IView.ViewType;
 
 public abstract class AbstractTool implements ITool {
@@ -44,9 +44,9 @@ public abstract class AbstractTool implements ITool {
 
 	protected void renderUI(GL2 gl, IView view, String[] text) {
 		if (view.getViewType() == ViewType.INTERACTIVE_VIEW) {
-			DrawingUtils.setTextColor(view, 1.0f, 1.0f, 1.0f, 0.5f);
+			DrawingUtilities.setTextColor(view, 1.0f, 1.0f, 1.0f, 0.5f);
 			for (int i = 0; i < text.length; ++i) {
-				DrawingUtils.drawTextRaster(view, 1, 30 + i + 1, text[i]);
+				DrawingUtilities.drawTextRaster(view, 1, 30 + i + 1, text[i]);
 			}
 		}
 	}
