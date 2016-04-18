@@ -3,6 +3,9 @@ Multi-Projector-Mapper (MPM)
 
 Java / OpenGL based framework for multi-projector 3D mapping and more.
 
+NOTE: This code is not developed any longer. It has been integrated in our ether framework. Work in progress is at https://github.com/arisona/ether
+
+
 Overview
 --------
 
